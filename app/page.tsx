@@ -1,30 +1,9 @@
 'use client';
 
 import Image from 'next/image';
+import { brokers } from '@/lib/brokers';
 
 export default function FXPayoutPage() {
-  const brokers = [
-    { name: 'EXNESS', domain: 'exness.com', link: 'https://one.exnessonelink.com/a/8cegzmlbpk' },
-    { name: 'VALETAX', domain: 'valetax.com', link: 'https://ma.valetax-indonesia.com/p/5808172' },
-    { name: 'PU PRIME', domain: 'puprime.com', link: 'https://puvip.co/la-partners/id/0bGTzP0i' },
-    { name: 'XM', domain: 'xm.com', link: 'https://affs.click/4gFt7' },
-    { name: 'ZFX', domain: 'zfx.com', link: 'https://my.zm-area.com/reg/truely?agentnumber=Z940752S4' },
-    { name: 'HFM', domain: 'hfm.com', link: 'https://register.hfmtrade-ind.com/sv/en/new-live-account/?refid=30494425' },
-    { name: 'VT MARKETS', domain: 'vtmarkets.com', link: 'https://www.vtmarkets.com/trade-now/?affid=22395035' },
-    { name: 'FBS', domain: 'fbs.com', link: 'https://fbs.partners/?ibl=569605&ibp=17852638' },
-    { name: 'TICKMILL', domain: 'tickmill.com', link: 'https://secure.itr-tickmill.com/?utm_campaign=ib_link&utm_content=IB89045395&utm_medium=Open+Account&utm_source=link&lp=https%3A%2F%2Fsecure.itr-tickmill.com%2Fid%2Fsign-up%2F' },
-    { name: 'DERIV', domain: 'deriv.com', link: 'https://deriv.partners/rx?sidc=07DDC1C5-AE63-4FC9-A23D-C6DA444F9225&utm_campaign=dynamicworks&utm_medium=affiliate&utm_source=CU279711' },
-    { name: 'FP MARKETS', domain: 'fpmarkets.com', link: 'https://portal.fpmarkets.com/register?redir=stv&fpm-affiliate-utm-source=IB&fpm-affiliate-agt=64952' },
-    { name: 'OCTAFX', domain: 'octafx.com', link: 'https://octa.click/bJLCLmX8zDZ?ib=47807098' },
-    { name: 'PEPPERSTONE', domain: 'pepperstone.com', link: 'https://trk.pepperstonepartners.com/aff_c?offer_id=367&aff_id=42191' },
-    { name: 'AXI', domain: 'axi.com', link: 'https://www.axi.com/int/live-account?promocode=4736053' },
-    { name: 'FINEX', domain: 'finex.co.id', link: 'https://track.finex.co.id/click?pid=5759&offer_id=12' },
-    { name: 'VANTAGE', domain: 'vantagemarkets.com', link: 'https://www.vantagemarketsea.com/id/open-live-account/?affid=MjA3OTY2Mzk=' },
-    { name: 'EC MARKETS', domain: 'ecmarkets.com', link: 'https://i.ecmarkets.sc/api/client/pm/2/JTX4W' },
-    { name: 'HEADWAY', domain: 'headway.com', link: 'https://headway.partners/user/signup?hwp=8435da' },
-    { name: 'OANDA', domain: 'oanda.com', link: 'https://go.oanda.com/visit/?bta=39193&brand=oanda' },
-  ];
-
   return (
     <div className="relative overflow-hidden min-h-screen bg-premium">
       {/* Animated Background Chart */}
@@ -149,8 +128,11 @@ export default function FXPayoutPage() {
 
             {/* Button 2: Perkalian Rebate */}
             <div className="cta-button">
-                <button
-                  className="w-full px-6 py-4 border-2 border-[#2F5BFF] text-[#2F5BFF] rounded-[14px] bg-white hover:shadow-2xl hover:shadow-blue-500/30 hover:-translate-y-1 hover:scale-105"
+                <a
+                  href="https://www.fxpayout.com/calculator"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full block px-6 py-4 border-2 border-[#2F5BFF] text-[#2F5BFF] rounded-[14px] bg-white hover:shadow-2xl hover:shadow-blue-500/30 hover:-translate-y-1 hover:scale-105 text-center"
                 style={{
                   fontWeight: 'bold',
                   fontSize: '1.125rem',
@@ -158,7 +140,7 @@ export default function FXPayoutPage() {
                 }}
               >
                 Perkalian Rebate
-              </button>
+              </a>
               <p className="text-slate-600 text-sm mt-2 text-center">
                 Maksimalkan profit dari setiap lot trading Anda.
               </p>
@@ -166,33 +148,58 @@ export default function FXPayoutPage() {
           </div>
 
           {/* Broker List Section */}
-          <div className="mb-12">
+          <div className="mb-12 w-full">
             <h2 className="text-2xl font-bold text-center mb-8" style={{ color: '#111827' }}>
               List Broker Partner
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="space-y-3 max-w-full">
               {brokers.map((broker, idx) => (
                 <a
                   key={idx}
-                  href={broker.link}
+                  href={broker.ibLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="broker-card flex flex-col items-center justify-center gap-3 p-4"
+                  className="block bg-white rounded-xl p-5 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 border border-gray-100"
                 >
-                  <img
-                    src={broker.name === 'HEADWAY' ? '/headway-logo.png' : `https://www.google.com/s2/favicons?sz=128&domain=${broker.domain}`}
-                    alt={`${broker.name} logo`}
-                    width={40}
-                    height={40}
-                    style={{
-                      objectFit: 'contain',
-                      borderRadius: '8px'
-                    }}
-                  />
-                  {/* Broker Name */}
-                  <span className="text-xs font-semibold text-center transition-colors duration-300 group-hover:text-[#2F5BFF]">
-                    {broker.name}
-                  </span>
+                  {/* Broker Header with Logo */}
+                  <div className="flex items-center gap-4 mb-4 pb-3 border-b border-gray-200">
+                    <img 
+                      src={broker.name === 'Headway' ? '/headway-logo.png' : `https://www.google.com/s2/favicons?sz=128&domain=${broker.domain}`}
+                      alt={`${broker.name} logo`}
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-lg flex-shrink-0"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect fill='%232F5BFF' width='128' height='128'/%3E%3Ctext x='50%25' y='50%25' font-size='64' fill='white' text-anchor='middle' dy='.3em'%3E${broker.name.charAt(0)}%3C/text%3E%3C/svg%3E`;
+                      }}
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-bold text-base" style={{ color: '#111827' }}>
+                        {broker.name}
+                      </h3>
+                    </div>
+                    <span className="text-xs px-3 py-1 rounded-full font-semibold whitespace-nowrap" style={{ 
+                      backgroundColor: broker.type === 'auto' ? '#DBEAFE' : broker.type === 'manual' ? '#FEF3C7' : '#DBEAFE',
+                      color: broker.type === 'auto' ? '#0369A1' : broker.type === 'manual' ? '#92400E' : '#0369A1'
+                    }}>
+                      {broker.type.toUpperCase()}
+                    </span>
+                  </div>
+                  
+                  {/* Instruments Grid */}
+                  <div className="grid grid-cols-3 gap-3">
+                    {broker.instruments.map((instrument, iIdx) => (
+                      <div key={iIdx} className="bg-gradient-to-b from-blue-50 to-blue-100/50 rounded-lg p-3 text-center border border-blue-200/50">
+                        <p className="font-semibold text-gray-800 text-sm mb-1">{instrument.name}</p>
+                        {instrument.rebate !== undefined && (
+                          <p className="text-[#2F5BFF] font-bold text-base">${instrument.rebate.toFixed(2)}</p>
+                        )}
+                        {instrument.rebateText && (
+                          <p className="text-gray-600 text-xs mt-1">{instrument.rebateText}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </a>
               ))}
             </div>
