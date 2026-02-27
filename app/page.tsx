@@ -111,8 +111,11 @@ export default function FXPayoutPage() {
 
             {/* Button 1: Join Grup */}
             <div className="cta-button">
-              <button
-                className="w-full px-6 py-4 bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white rounded-[14px] hover:shadow-2xl hover:shadow-blue-500/50 hover:-translate-y-1 hover:scale-105"
+              <a
+                href="https://t.me/+P5ylfSvx1e1jMmI1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full block px-6 py-4 bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white rounded-[14px] hover:shadow-2xl hover:shadow-blue-500/50 hover:-translate-y-1 hover:scale-105 text-center"
                 style={{
                   fontWeight: 'bold',
                   fontSize: '1.125rem',
@@ -120,7 +123,7 @@ export default function FXPayoutPage() {
                 }}
               >
                 Grup Khusus Clipper Fxpayout
-              </button>
+              </a>
               <p className="text-sm mt-2 text-center" style={{ color: '#374151' }}>
                 Akses sinyal, edukasi, dan update rebate terbaru.
               </p>
