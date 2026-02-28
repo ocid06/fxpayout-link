@@ -207,7 +207,73 @@ export default function FXPayoutPage() {
               ))}
             </div>
           </div>
+          {/* ================= WHATSAPP ADMIN ================= */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-center mb-6" style={{ color: '#111827' }}>
+              Hubungi Admin FXPayout
+            </h2>
 
+            <div className="space-y-4">
+
+              <a
+                href="https://wa.me/6282125597634"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full block px-6 py-4 bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white rounded-[14px] hover:shadow-2xl hover:shadow-blue-500/50 hover:-translate-y-1 hover:scale-105 text-center"
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: '1.125rem',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <span className="flex items-center justify-center gap-2">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="20" height="20" fill="currentColor">
+    <path d="M16 .5C7.5.5.5 7.4.5 16c0 2.8.7 5.4 2.1 7.7L.5 31.5l8-2.1c2.2 1.2 4.7 1.8 7.5 1.8 8.5 0 15.5-6.9 15.5-15.5S24.5.5 16 .5zm0 28.2c-2.4 0-4.7-.6-6.8-1.8l-.5-.3-4.8 1.3 1.3-4.7-.3-.5C3.7 20.6 3 18.4 3 16 3 9 9 3 16 3s13 6 13 13-6 12.7-13 12.7zm7.2-9.5c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.2 1.4c-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.3-2.1-2.7-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.7.2-.3.3-.5.5-.8.2-.3.1-.6 0-.8-.1-.2-.9-2.1-1.2-2.8-.3-.7-.6-.6-.9-.6h-.8c-.3 0-.8.1-1.2.6-.4.5-1.6 1.6-1.6 3.9s1.6 4.5 1.8 4.8c.2.3 3.1 4.8 7.6 6.7 1 .4 1.8.6 2.4.8 1 .3 1.9.3 2.6.2.8-.1 2.3-.9 2.7-1.8.3-.9.3-1.7.2-1.8-.1-.2-.3-.3-.7-.5z"/>
+  </svg>
+                Chat Admin 1
+</span>
+              </a>
+
+              <a
+                href="https://wa.me/628984785573"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full block px-6 py-4 bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white rounded-[14px] hover:shadow-2xl hover:shadow-blue-500/50 hover:-translate-y-1 hover:scale-105 text-center"
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: '1.125rem',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <span className="flex items-center justify-center gap-2">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="20" height="20" fill="currentColor">
+    <path d="M16 .5C7.5.5.5 7.4.5 16c0 2.8.7 5.4 2.1 7.7L.5 31.5l8-2.1c2.2 1.2 4.7 1.8 7.5 1.8 8.5 0 15.5-6.9 15.5-15.5S24.5.5 16 .5zm0 28.2c-2.4 0-4.7-.6-6.8-1.8l-.5-.3-4.8 1.3 1.3-4.7-.3-.5C3.7 20.6 3 18.4 3 16 3 9 9 3 16 3s13 6 13 13-6 12.7-13 12.7zm7.2-9.5c-.4-.2-2.3-1.1-2.6-1.2-.4-.1-.6-.2-.9.2s-1 1.2-1.2 1.4c-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.3-2.1-2.7-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.7.2-.3.3-.5.5-.8.2-.3.1-.6 0-.8-.1-.2-.9-2.1-1.2-2.8-.3-.7-.6-.6-.9-.6h-.8c-.3 0-.8.1-1.2.6-.4.5-1.6 1.6-1.6 3.9s1.6 4.5 1.8 4.8c.2.3 3.1 4.8 7.6 6.7 1 .4 1.8.6 2.4.8 1 .3 1.9.3 2.6.2.8-.1 2.3-.9 2.7-1.8.3-.9.3-1.7.2-1.8-.1-.2-.3-.3-.7-.5z"/>
+  </svg>
+                Chat Admin 2
+</span>
+              </a>
+
+              <a
+                href="https://whatsapp.com/channel/0029VbBwSxf8fewzsFqX8B2f"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full block px-6 py-4 border-2 border-[#2F5BFF] text-[#2F5BFF] rounded-[14px] bg-white hover:shadow-2xl hover:shadow-blue-500/30 hover:-translate-y-1 hover:scale-105 text-center"
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: '1.125rem',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <span className="flex items-center justify-center gap-2">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+    <path d="M3 3h18v2H3zm2 5h14v2H5zm-2 5h18v2H3zm2 5h14v2H5z"/>
+  </svg>
+  Gabung Saluran WhatsApp
+</span>
+              </a>
+
+            </div>
+          </div>
           {/* Footer */}
           <div className="text-center text-xs space-y-3 border-t border-[#e5e7eb] pt-8" style={{ color: '#374151' }}>
             <p className="font-semibold">
