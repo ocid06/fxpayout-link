@@ -220,7 +220,50 @@ export default function FXPayoutPage() {
             </div>
 
           </div>
+{/* SUPPORT / ADMIN */}
+<div className="mb-12 w-full text-center">
 
+  <h2 className="text-xl font-bold mb-3" style={{ color: '#111827' }}>
+    Butuh Bantuan?
+  </h2>
+
+  <p className="text-sm mb-6 max-w-sm mx-auto" style={{ color: '#374151' }}>
+    Tim admin FXPayout siap membantu Anda terkait pendaftaran broker,
+    validasi akun, maupun klaim rebate.
+  </p>
+
+  <div className="space-y-3">
+
+    <a
+      href="https://wa.me/6282125597634"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block w-full px-6 py-4 rounded-[14px] text-white font-semibold bg-[#25D366] hover:opacity-90 transition"
+    >
+      Chat Admin FXPayout 1
+    </a>
+
+    <a
+      href="https://wa.me/628XXXXXXXXXX"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block w-full px-6 py-4 rounded-[14px] text-white font-semibold bg-[#25D366] hover:opacity-90 transition"
+    >
+      Chat Admin FXPayout 2
+    </a>
+
+    <a
+      href="https://whatsapp.com/channel/XXXXXXXX"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block w-full px-6 py-4 rounded-[14px] text-white font-semibold bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5]"
+    >
+      Gabung Saluran WhatsApp
+    </a>
+
+  </div>
+
+</div>
           {/* FOOTER */}
           <div className="text-center text-xs space-y-3 border-t border-[#e5e7eb] pt-8" style={{ color: '#374151' }}>
             <p className="font-semibold">Forex Risk Disclaimer</p>
