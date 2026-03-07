@@ -221,45 +221,67 @@ export default function FXPayoutPage() {
 
           </div>
 {/* SUPPORT / ADMIN */}
-<div className="mb-12 w-full text-center">
+<div className="mb-12 w-full">
 
-  <h2 className="text-xl font-bold mb-3" style={{ color: '#111827' }}>
-    Butuh Bantuan?
-  </h2>
+  <div className="bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-sm">
 
-  <p className="text-sm mb-6 max-w-sm mx-auto" style={{ color: '#374151' }}>
-    Tim admin FXPayout siap membantu Anda terkait pendaftaran broker,
-    validasi akun, maupun klaim rebate.
-  </p>
+    <h2 className="text-xl font-bold text-center mb-2 text-gray-900">
+      Butuh Bantuan?
+    </h2>
 
-  <div className="space-y-3">
+    <p className="text-sm text-center text-gray-600 mb-6">
+      Tim admin FXPayout siap membantu Anda terkait pendaftaran broker,
+      validasi akun, maupun klaim rebate.
+    </p>
 
-    <a
-      href="https://wa.me/6282125597634"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block w-full px-6 py-4 rounded-[14px] text-white font-semibold bg-[#25D366] hover:opacity-90 transition"
-    >
-      Chat Admin FXPayout 1
-    </a>
+    <div className="space-y-3">
 
-    <a
-      href="https://wa.me/628XXXXXXXXXX"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block w-full px-6 py-4 rounded-[14px] text-white font-semibold bg-[#25D366] hover:opacity-90 transition"
-    >
-      Chat Admin FXPayout 2
-    </a>
+      <a
+        href="https://wa.me/6282125597634"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-between px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 transition"
+      >
+        <span className="font-medium text-gray-800">
+          Chat Admin FXPayout 1
+        </span>
 
-    <a
-      href="https://whatsapp.com/channel/XXXXXXXX"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block w-full px-6 py-4 rounded-[14px] text-white font-semibold bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5]"
-    >
-      Gabung Saluran WhatsApp
-    </a>
+        <span className="text-[#2F5BFF] font-semibold text-sm">
+          WhatsApp →
+        </span>
+      </a>
+
+      <a
+        href="https://wa.me/628984785573"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-between px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 transition"
+      >
+        <span className="font-medium text-gray-800">
+          Chat Admin FXPayout 2
+        </span>
+
+        <span className="text-[#2F5BFF] font-semibold text-sm">
+          WhatsApp →
+        </span>
+      </a>
+
+      <a
+        href="https://whatsapp.com/channel/0029VbBwSxf8fewzsFqX8B2f"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-between px-5 py-4 rounded-xl bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white shadow-md hover:opacity-90 transition"
+      >
+        <span className="font-semibold">
+          Gabung Saluran WhatsApp
+        </span>
+
+        <span className="text-sm">
+          Join →
+        </span>
+      </a>
+
+    </div>
 
   </div>
 
