@@ -166,6 +166,18 @@ export const brokers: Broker[] = [
     ]
   },
 
+{
+  name: "IC Markets",
+  type: "auto",
+  ibLink: "https://icmarkets.com/?camp=90586",
+  domain: "icmarkets.com",
+  instruments: [
+    { name: "EUR/USD", rebate: 7 },
+    { name: "XAU/USD", rebate: 10 },
+    { name: "CRYPTO", rebate: 6 }
+  ]
+},
+
   {
     name: "Axi",
     type: "auto",
@@ -288,7 +300,31 @@ export const brokers: Broker[] = [
       { name: "XAU/USD", rebate: 7 },
       { name: "CRYPTO", rebate: 4 }
     ]
-  }
+  },
+
+   {
+    name: "TMGM ",
+    type: "manual",
+    ibLink: "https://portal.tmgm.com/register?r_code=IB1750254951D",
+    domain: "tmgm.com",
+    instruments: [
+      { name: "EUR/USD", rebate: 5 },
+      { name: "XAU/USD", rebate: 7 },
+      { name: "CRYPTO", rebate: 4 }
+    ]
+  },
+
+  {
+  name: "Ultima Markets",
+  type: "auto",
+  ibLink: "https://ultgo.com/la-com/id/LPtmn9kq",
+  domain: "ultimamarkets.com",
+  instruments: [
+    { name: "EUR/USD", rebate: 7 },
+    { name: "XAU/USD", rebate: 10 },
+    { name: "CRYPTO", rebate: 6 }
+  ]
+}
 
 ]
 
