@@ -244,7 +244,7 @@ export const brokers: Broker[] = [
 
   {
     name: "Headway",
-    type: "manual",
+    type: "auto",
     ibLink: "https://headway.partners/user/signup?hwp=8435da",
     domain: "headway.com",
     instruments: [
