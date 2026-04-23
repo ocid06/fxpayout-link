@@ -316,12 +316,12 @@ export const brokers: Broker[] = [
 
   {
   name: "Ultima Markets",
-  type: "auto",
+  type: "manual",
   ibLink: "https://ultgo.com/la-com/id/LPtmn9kq",
   domain: "ultimamarkets.com",
   instruments: [
-    { name: "EUR/USD", rebate: 7 },
-    { name: "XAU/USD", rebate: 10 },
+    { name: "EUR/USD", rebate: 11 },
+    { name: "XAU/USD", rebate: 12 },
     { name: "CRYPTO", rebate: 6 }
   ]
 }
