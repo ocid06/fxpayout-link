@@ -91,43 +91,66 @@ export default function FXPayoutPage() {
 
           </div>
 
-          {/* CTA */}
           <div className="space-y-4 mb-12">
 
-            <div className="cta-button">
-              <a
-                href="https://fxpayout.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full block px-6 py-4 bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white rounded-[14px] text-center"
-              >
-                Kunjungi Website Resmi
-              </a>
-            </div>
+  {/* WEBSITE */}
+  <div className="cta-button">
+    <a
+      href="https://fxpayout.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-full block px-6 py-4 bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white rounded-[14px] text-center"
+    >
+      Kunjungi Website Resmi
+    </a>
+  </div>
 
-            <div className="cta-button">
-              <a
-                href="https://t.me/+P5ylfSvx1e1jMmI1"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full block px-6 py-4 bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white rounded-[14px] text-center"
-              >
-                Grup Khusus Clipper Fxpayout
-              </a>
-            </div>
+  {/* GROUP CARD */}
+  <div className="cta-button">
+    <a
+      href="https://t.me/+P5ylfSvx1e1jMmI1"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block rounded-2xl p-[1px] bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] hover:shadow-xl transition-all duration-300"
+    >
+      <div className="flex items-center gap-4 bg-white rounded-2xl p-4">
 
-            <div className="cta-button">
-              <a
-                href="https://www.fxpayout.com/calculator"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full block px-6 py-4 border-2 border-[#2F5BFF] text-[#2F5BFF] rounded-[14px] text-center"
-              >
-                Perkalian Rebate
-              </a>
-            </div>
+        <img
+          src="/group.jpg"
+          alt="Ftrade Community"
+          className="w-14 h-14 rounded-full object-cover border border-gray-200"
+        />
 
-          </div>
+        <div className="flex-1 text-left">
+          <h3 className="font-semibold text-[#111827] text-sm">
+            FTRADE OFFICIAL COMMUNITY
+          </h3>
+          <p className="text-xs text-gray-500">
+            Komunitas trader • Diskusi & insight market
+          </p>
+        </div>
+
+        <div className="text-[#2F5BFF] font-bold">
+          →
+        </div>
+
+      </div>
+    </a>
+  </div>
+
+  {/* CALCULATOR */}
+  <div className="cta-button">
+    <a
+      href="https://www.fxpayout.com/calculator"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-full block px-6 py-4 border-2 border-[#2F5BFF] text-[#2F5BFF] rounded-[14px] text-center"
+    >
+      Perkalian Rebate
+    </a>
+  </div>
+
+</div>
 
           {/* BROKER LIST */}
           <div className="mb-12 w-full">
