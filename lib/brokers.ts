@@ -309,7 +309,7 @@ export const brokers: Broker[] = [
     domain: "tmgm.com",
     instruments: [
       { name: "EUR/USD", rebate: 5 },
-      { name: "XAU/USD", rebate: 7 },
+      { name: "XAU/USD", rebate: 17 },
       { name: "CRYPTO", rebate: 4 }
     ]
   },
