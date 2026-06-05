@@ -314,6 +314,18 @@ export const brokers: Broker[] = [
     ]
   },
 
+     {
+    name: "CXM",
+    type: "manual",
+    ibLink: "https://secure.cxmid.com/links/go/346478",
+    domain: "cxmid.com",
+    instruments: [
+      { name: "EUR/USD", rebate: 3 },
+      { name: "XAU/USD", rebate: 7 },
+      { name: "CRYPTO", rebate: 2 }
+    ]
+  },
+
 
   {
   name: "Ultima Markets",

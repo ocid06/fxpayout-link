@@ -117,16 +117,16 @@ export default function FXPayoutPage() {
 
         <img
           src="/group.jpg"
-          alt="Ftrade Community"
+          alt="Bergabung dengan komunitas telegram fxpayout"
           className="w-14 h-14 rounded-full object-cover border border-gray-200"
         />
 
         <div className="flex-1 text-left">
           <h3 className="font-semibold text-[#111827] text-sm">
-            FTRADE OFFICIAL COMMUNITY
+            bergabung dengan grup clipper telegram
           </h3>
           <p className="text-xs text-gray-500">
-            Komunitas trader • Diskusi & insight market
+            Reward Clipper • Diskusi clipper & Task clipper
           </p>
         </div>
 
