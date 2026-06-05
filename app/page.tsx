@@ -115,12 +115,11 @@ export default function FXPayoutPage() {
     >
       <div className="flex items-center gap-4 bg-white rounded-2xl p-4">
 
-        <img
-          src="/group.jpg"
-          alt="Bergabung dengan komunitas telegram fxpayout"
-          className="w-14 h-14 rounded-full object-cover border border-gray-200"
-        />
-
+<img
+  src="/group.jpeg"
+  alt="Bergabung dengan komunitas telegram fxpayout"
+  className="w-16 h-16 rounded-2xl object-cover shrink-0 border border-gray-200 shadow-sm"
+/>
         <div className="flex-1 text-left">
           <h3 className="font-semibold text-[#111827] text-sm">
             bergabung dengan grup clipper telegram
