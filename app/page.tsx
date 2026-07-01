@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
+import { Languages } from 'lucide-react';
 import { brokers } from '@/lib/brokers';
 import { translations, type Locale } from '@/locales';
 
@@ -283,14 +284,13 @@ export default function FXPayoutPage() {
                   <button
                     type="button"
                     onClick={() => setIsLanguageMenuOpen((prev) => !prev)}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#2F5BFF]/20 bg-white/75 text-sm font-semibold text-[#2F5BFF] shadow-[0_10px_20px_-18px_rgba(47,91,255,0.9)]"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#2F5BFF]/20 bg-white/75 text-sm font-semibold text-[#2F5BFF] shadow-[0_10px_20px_-18px_rgba(47,91,255,0.9)] lg:w-auto lg:min-w-[104px] lg:gap-2 lg:px-3"
                     aria-label={t.language.changeLanguage}
                   >
-                    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
-                      <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z" stroke="currentColor" strokeWidth="1.8" />
-                      <path d="M4.5 8.5c1.8-2.3 4.2-3.8 7.5-4.5M19.5 15.5c-1.8 2.3-4.2 3.8-7.5 4.5M4.5 15.5c1.8 2.3 4.2 3.8 7.5 4.5M19.5 8.5c-1.8-2.3-4.2-3.8-7.5-4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                      <path d="M3 12h18M12 3a14.5 14.5 0 0 1 0 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                    </svg>
+                    <Languages className="h-5 w-5" aria-hidden="true" />
+                    <span className="hidden text-[10px] font-bold uppercase tracking-[0.28em] text-[#2F5BFF] lg:inline-block">
+                      {locale.toUpperCase()}
+                    </span>
                   </button>
 
                   {isLanguageMenuOpen && (
