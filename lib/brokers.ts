@@ -29,8 +29,8 @@ export const brokers: Broker[] = [
     domain: "tmgm.com",
     instruments: [
       { name: "EUR/USD", rebate: 5 },
-      { name: "XAU/USD", rebate: 17 },
-      { name: "CRYPTO", rebate: 4 }
+      { name: "XAU/USD", rebate: 18 },
+      { name: "CRYPTO", rebate: 1 }
     ]
   },
 
@@ -40,9 +40,9 @@ export const brokers: Broker[] = [
     ibLink: "https://ma.valetax-indonesia.com/p/5808172",
     domain: "valetax.com",
     instruments: [
-      { name: "EUR/USD", rebate: 11 },
-      { name: "XAU/USD", rebate: 16 },
-      { name: "CRYPTO", rebate: 13 }
+      { name: "eurUsd", rebate: 11 },
+      { name: "xauUsd", rebate: 16 },
+      { name: "crypto", rebate: 13 }
     ]
   },
 
@@ -52,9 +52,9 @@ export const brokers: Broker[] = [
     ibLink: "https://one.exnessonelink.com/boarding/sign-up/a/fxpayout?lng=id",
     domain: "exness.com",
     instruments: [
-      { name: "XAU/USD", rebate: 11.23 },
-      { name: "FOREX", rebate: 3.99 },
-      { name: "CRYPTO", rebate: 7.2 }
+      { name: "xauUsd", rebate: 11.23 },
+      { name: "forex", rebate: 3.99 },
+      { name: "crypto", rebate: 7.2 }
     ]
   },
 
@@ -64,9 +64,9 @@ export const brokers: Broker[] = [
     ibLink: "https://puvip.co/la-partners/id/0bGTzP0i",
     domain: "puprime.com",
     instruments: [
-      { name: "EUR/USD", rebate: 6.5 },
-      { name: "XAU/USD", rebate: 9.5 },
-      { name: "CRYPTO", rebate: 5.2 }
+      { name: "eurUsd", rebate: 6.5 },
+      { name: "xauUsd", rebate: 9.5 },
+      { name: "crypto", rebate: 5.2 }
     ]
   },
 
@@ -76,9 +76,9 @@ export const brokers: Broker[] = [
     ibLink: "https://my.zm-area.com/reg/truely?agentnumber=Z940752S4",
     domain: "zfx.com",
     instruments: [
-      { name: "EUR/USD", rebate: 8 },
-      { name: "XAU/USD", rebate: 13 },
-      { name: "CRYPTO", rebate: 8 }
+      { name: "eurUsd", rebate: 8 },
+      { name: "xauUsd", rebate: 13 },
+      { name: "crypto", rebate: 8 }
     ]
   },
 
@@ -88,9 +88,9 @@ export const brokers: Broker[] = [
     ibLink: "https://register.hfmtrade-ind.com/sv/en/new-live-account/?refid=30494425",
     domain: "hfm.com",
     instruments: [
-      { name: "EUR/USD", rebate: 3.2 },
-      { name: "XAU/USD", rebate: 9 },
-      { name: "CRYPTO", rebate: 0.8 }
+      { name: "eurUsd", rebate: 3.2 },
+      { name: "xauUsd", rebate: 9 },
+      { name: "crypto", rebate: 0.8 }
     ]
   },
 
@@ -100,9 +100,9 @@ export const brokers: Broker[] = [
     ibLink: "https://fbs.partners/?ibl=569605&ibp=17852638",
     domain: "fbs.com",
     instruments: [
-      { name: "EUR/USD", rebate: 3.61 },
-      { name: "XAU/USD", rebate: 10 },
-      { name: "CRYPTO", rebate: 2.5 }
+      { name: "eurUsd", rebate: 3.61 },
+      { name: "xauUsd", rebate: 10 },
+      { name: "crypto", rebate: 2.5 }
     ]
   },
 
@@ -112,9 +112,9 @@ export const brokers: Broker[] = [
     ibLink: "https://octa.click/bJLCLmX8zDZ?ib=47807098",
     domain: "octafx.com",
     instruments: [
-      { name: "EUR/USD", rebate: 8 },
-      { name: "XAU/USD", rebate: 8 },
-      { name: "CRYPTO", rebate: 8 }
+      { name: "eurUsd", rebate: 8 },
+      { name: "xauUsd", rebate: 8 },
+      { name: "crypto", rebate: 8 }
     ]
   },
 
@@ -244,9 +244,9 @@ export const brokers: Broker[] = [
     ibLink: "https://deriv.partners/rx?sidc=07DDC1C5-AE63-4FC9-A23D-C6DA444F9225&utm_campaign=dynamicworks&utm_medium=affiliate&utm_source=CU279711",
     domain: "deriv.com",
     instruments: [
-      { name: "Forex", rebateText: "Up to 40% Trading Fee" },
-      { name: "Gold", rebateText: "Volume Commission" },
-      { name: "Crypto", rebateText: "Volume Commission" }
+      { name: "forex", rebateText: "upTo40TradingFee" },
+      { name: "gold", rebateText: "volumeCommission" },
+      { name: "crypto", rebateText: "volumeCommission" }
     ]
   },
 
@@ -284,9 +284,9 @@ export const brokers: Broker[] = [
     ibLink: "https://go.oanda.com/visit/?bta=39193&brand=oanda",
     domain: "oanda.com",
     instruments: [
-      { name: "EUR/USD", rebateText: "30% Spread Revshare" },
-      { name: "XAU/USD", rebateText: "30% Spread Revshare" },
-      { name: "CRYPTO", rebateText: "30% Spread Revshare" }
+      { name: "eurUsd", rebateText: "spreadRevshare" },
+      { name: "xauUsd", rebateText: "spreadRevshare" },
+      { name: "crypto", rebateText: "spreadRevshare" }
     ]
   },
 
@@ -320,9 +320,9 @@ export const brokers: Broker[] = [
     ibLink: "https://www.avatrade.com?tag=219594",
     domain: "avatrade.com",
     instruments: [
-      { name: "EUR/USD", rebate: 5 },
-      { name: "XAU/USD", rebate: 7 },
-      { name: "CRYPTO", rebate: 4 }
+      { name: "eurUsd", rebate: 5 },
+      { name: "xauUsd", rebate: 17 },
+      { name: "crypto", rebate: 4 }
     ]
   },
 
@@ -362,6 +362,7 @@ export const brokers: Broker[] = [
       { name: "CRYPTO", rebate: 3 }
     ]
   }
+
 
 ]
 
