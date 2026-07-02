@@ -39,29 +39,41 @@ export const en = {
       {
         title: 'Create Your FXPayout Account',
         description:
-          'Before registering a broker, create your FXPayout account at https://fxpayout.com. The Trader Dashboard is used to validate your trading accounts, monitor cashback, and withdraw rebates.',
+          'Create your official account at https://fxpayout.com first. All trading-account validation and rebate withdrawals are handled only through FXPayout.',
       },
       {
         title: 'Register Your Broker',
         description:
-          'Return to this page and register with your preferred broker using the same email address as your FXPayout account whenever possible.',
+          'Choose a partner broker and register using the same email as your FXPayout account so account matching is faster and cleaner.',
       },
       {
         title: 'Link Your Trading Account',
         description:
-          'After your broker account has been created, log in to the FXPayout Trader Dashboard, open the Brokers page, and add your trading account number so the system can automatically detect your trading activity and calculate rebates accurately.',
+          'Log in to the FXPayout Trader Dashboard, open Brokers, and add your trading account number so activity can be tracked automatically.',
       },
       {
         title: 'Set Your Withdrawal Method',
         description:
-          'Add your preferred withdrawal method, such as a bank account or crypto wallet, to receive cashback payments securely.',
+          'Set your preferred withdrawal method (bank or crypto wallet) in the FXPayout dashboard. Rebate withdrawals are available only on FXPayout.com.',
       },
       {
         title: 'Start Trading & Earn Cashback',
         description:
-          'Once your trading account has been successfully validated, your cashback will be tracked automatically inside the Trader Dashboard and can be withdrawn according to the FXPayout withdrawal policy.',
+          'Once validated, trade normally and your cashback will be recorded automatically in the dashboard for future withdrawal.',
       },
     ],
+    helpCta: 'If you are still unsure, contact admin now. Our team will guide you until your registration is complete.',
+    helpButton: 'Contact Admin Now',
+  },
+  reviews: {
+    title: 'User Reviews',
+    subtitle: 'Trusted by traders',
+    namePlaceholder: 'Your name',
+    ratingLabel: 'Your rating',
+    commentPlaceholder: 'Share your experience with registration or cashback.',
+    submit: 'Submit review',
+    viewAll: 'View all reviews',
+    showLess: 'Show fewer reviews',
   },
   broker: {
     sectionTitle: 'List Broker Partner',

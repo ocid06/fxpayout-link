@@ -39,29 +39,41 @@ export const zh = {
       {
         title: '创建你的 FXPayout 账户',
         description:
-          '在注册经纪商之前，请先在 https://fxpayout.com 创建您的 FXPayout 账户。Trader Dashboard 用于验证您的交易账户、监控 cashback，并提取返利。',
+          '先在 https://fxpayout.com 创建 FXPayout 账户。',
       },
       {
         title: '注册你的经纪商',
         description:
-          '返回此页面，并尽量使用与 FXPayout 账户相同的电子邮箱注册您 preferred 的经纪商。',
+          '使用与 FXPayout 相同的邮箱注册经纪商。',
       },
       {
         title: '绑定你的交易账户',
         description:
-          '在您的经纪商账户创建完成后，登录 FXPayout Trader Dashboard，打开 Brokers 页面，并添加您的交易账户号码，以便系统自动检测您的交易活动并准确计算返利。',
+          '在 Trader Dashboard 中绑定经纪商账户。',
       },
       {
         title: '设置提款方式',
         description:
-          '添加您偏好的提款方式，例如银行账户或加密钱包，以安全地接收 cashback 支付。',
+          '选择提款方式以接收返利。',
       },
       {
         title: '开始交易并赚取返现',
         description:
-          '一旦您的交易账户成功通过验证，cashback 将会在 Trader Dashboard 中自动追踪，并根据 FXPayout 的提款政策进行提取。',
+          '正常交易，返现会自动到账。',
       },
     ],
+    helpCta: '如果您还不清楚，请立即联系管理员，我们会协助您直到成功完成注册。',
+    helpButton: '立即联系管理员',
+  },
+  reviews: {
+    title: '用户评价',
+    subtitle: '受到交易者信赖',
+    namePlaceholder: '您的名字',
+    ratingLabel: '您的评分',
+    commentPlaceholder: '分享您在注册或返现方面的体验。',
+    submit: '提交评价',
+    viewAll: '查看全部评价',
+    showLess: '收起部分评价',
   },
   broker: {
     sectionTitle: '合作经纪商列表',

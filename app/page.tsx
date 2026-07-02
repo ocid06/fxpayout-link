@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { Languages } from 'lucide-react';
+import { FileText, Link2, Languages, TrendingUp, UserRound, Wallet, Star } from 'lucide-react';
 import { brokers } from '@/lib/brokers';
 import { translations, type Locale } from '@/locales';
 
 export default function FXPayoutPage() {
   type RegionTab = 'indonesia' | 'global' | 'all';
   type RebateFilter = 'all' | 'auto' | 'manual';
+  type ReviewLocale = Locale;
 
   const indonesiaBrokerNames = ['Finex', 'MIFX', 'HSB'];
   const regionTabs: { key: RegionTab }[] = [
@@ -23,6 +24,80 @@ export default function FXPayoutPage() {
   const [locale, setLocale] = useState<Locale>('en');
   const [isLocaleReady, setIsLocaleReady] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+
+  type Review = {
+    id: number;
+    name: string;
+    country: string;
+    localeCode: ReviewLocale;
+    rating: number;
+    comment: string;
+    date: string;
+  };
+
+  const languageOrder: ReviewLocale[] = ['id', 'en', 'ar', 'ru', 'zh'];
+
+  const localeCountryMap: Record<ReviewLocale, string> = {
+    id: 'Indonesia',
+    en: 'United Kingdom',
+    ar: 'United Arab Emirates',
+    ru: 'Russia',
+    zh: 'China',
+  };
+
+  const initialReviews: Review[] = [
+    {
+      id: 1,
+      country: 'Indonesia',
+      localeCode: 'id',
+      name: 'Ari Setiawan',
+      rating: 5,
+      comment: 'Alur daftar sangat jelas. Akun broker saya berhasil terhubung kurang dari 10 menit.',
+      date: '2026-05-18',
+    },
+    {
+      id: 2,
+      country: 'United Kingdom',
+      localeCode: 'en',
+      name: 'Daniel Brooks',
+      rating: 5,
+      comment: 'The onboarding details are very clear, and cashback tracking works exactly as explained.',
+      date: '2026-05-22',
+    },
+    {
+      id: 3,
+      country: 'United Arab Emirates',
+      localeCode: 'ar',
+      name: 'Noura Al Mansoori',
+      rating: 4,
+      comment: 'الشرح واضح جداً، وفريق الدعم ساعدني حتى تم تفعيل الحساب بالكامل.',
+      date: '2026-06-02',
+    },
+    {
+      id: 4,
+      country: 'Russia',
+      localeCode: 'ru',
+      name: 'Mikhail Orlov',
+      rating: 5,
+      comment: 'Отличный сервис: зарегистрировался, подключил счет и сразу начал получать кэшбэк.',
+      date: '2026-06-17',
+    },
+    {
+      id: 5,
+      country: 'China',
+      localeCode: 'zh',
+      name: 'Li Wei',
+      rating: 5,
+      comment: '流程很清晰，客服响应很快，返利记录也非常透明。',
+      date: '2026-06-20',
+    },
+  ];
+
+  const [reviews, setReviews] = useState<Review[]>(initialReviews);
+  const [reviewName, setReviewName] = useState('');
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState('');
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   const t = translations[locale];
 
@@ -42,6 +117,7 @@ export default function FXPayoutPage() {
 
   useEffect(() => {
     const storedLanguage = window.localStorage.getItem('fxpayout-locale') as Locale | null;
+    const hasManualLanguage = window.localStorage.getItem('fxpayout-locale-manual') === '1';
     const storedTab = window.sessionStorage.getItem('fxpayout-broker-tab');
     if (storedTab === 'indonesia' || storedTab === 'global' || storedTab === 'all') {
       setSelectedTab(storedTab);
@@ -76,7 +152,10 @@ export default function FXPayoutPage() {
       return null;
     };
 
-    if (storedLanguage === 'en' || storedLanguage === 'id' || storedLanguage === 'ar' || storedLanguage === 'ru' || storedLanguage === 'zh') {
+    if (
+      hasManualLanguage &&
+      (storedLanguage === 'en' || storedLanguage === 'id' || storedLanguage === 'ar' || storedLanguage === 'ru' || storedLanguage === 'zh')
+    ) {
       setLocale(storedLanguage);
       setIsLocaleReady(true);
       return;
@@ -140,6 +219,50 @@ export default function FXPayoutPage() {
   }, []);
 
   useEffect(() => {
+    const storedReviews = window.localStorage.getItem('fxpayout-reviews');
+
+    if (storedReviews) {
+      try {
+        const parsedReviews = JSON.parse(storedReviews) as Partial<Review>[];
+
+        if (Array.isArray(parsedReviews) && parsedReviews.length > 0) {
+          const normalizedReviews: Review[] = parsedReviews
+            .map((review, index) => {
+              if (!review.name || !review.comment || typeof review.rating !== 'number') {
+                return null;
+              }
+
+              const localeCode = languageOrder.includes(review.localeCode as ReviewLocale)
+                ? (review.localeCode as ReviewLocale)
+                : 'en';
+
+              return {
+                id: typeof review.id === 'number' ? review.id : Date.now() + index,
+                name: review.name,
+                comment: review.comment,
+                rating: Math.min(5, Math.max(1, review.rating)),
+                date: typeof review.date === 'string' ? review.date : new Date().toLocaleDateString(),
+                localeCode,
+                country: typeof review.country === 'string' ? review.country : localeCountryMap[localeCode],
+              };
+            })
+            .filter((review): review is Review => review !== null);
+
+          if (normalizedReviews.length > 0) {
+            setReviews(normalizedReviews);
+          }
+        }
+      } catch {
+        window.localStorage.removeItem('fxpayout-reviews');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem('fxpayout-reviews', JSON.stringify(reviews));
+  }, [reviews]);
+
+  useEffect(() => {
     window.sessionStorage.setItem('fxpayout-broker-tab', selectedTab);
   }, [selectedTab]);
 
@@ -155,12 +278,6 @@ export default function FXPayoutPage() {
 
     if (!window.sessionStorage.getItem('fxpayout-broker-tab')) {
       setSelectedTab(locale === 'id' ? 'indonesia' : 'global');
-    }
-  }, [locale, isLocaleReady]);
-
-  useEffect(() => {
-    if (isLocaleReady) {
-      window.localStorage.setItem('fxpayout-locale', locale);
     }
   }, [locale, isLocaleReady]);
 
@@ -189,6 +306,52 @@ export default function FXPayoutPage() {
     visibleBrokers.length === brokers.length
       ? t.broker.countAvailable(brokers.length)
       : t.broker.countShowing(visibleBrokers.length, brokers.length);
+
+  const averageRating = reviews.length
+    ? (reviews.reduce((total, review) => total + review.rating, 0) / reviews.length).toFixed(1)
+    : '0.0';
+
+  const sortedReviews = useMemo(() => {
+    const shuffledReviews = [...reviews];
+
+    for (let index = shuffledReviews.length - 1; index > 0; index -= 1) {
+      const randomIndex = Math.floor(Math.random() * (index + 1));
+      const current = shuffledReviews[index];
+      shuffledReviews[index] = shuffledReviews[randomIndex];
+      shuffledReviews[randomIndex] = current;
+    }
+
+    return shuffledReviews;
+  }, [reviews]);
+
+  const visibleReviews = showAllReviews ? sortedReviews : sortedReviews.slice(0, 5);
+
+  const handleSubmitReview = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const name = reviewName.trim();
+    const comment = reviewComment.trim();
+
+    if (!name || !comment) {
+      return;
+    }
+
+    const newReview: Review = {
+      id: Date.now(),
+      name,
+      country: localeCountryMap[locale],
+      localeCode: locale,
+      rating: reviewRating,
+      comment,
+      date: new Date().toLocaleDateString(),
+    };
+
+    setReviews((currentReviews) => [newReview, ...currentReviews]);
+    setReviewName('');
+    setReviewRating(5);
+    setReviewComment('');
+    setShowAllReviews(true);
+  };
 
   const resetFilters = () => {
     setSearchTerm('');
@@ -301,6 +464,8 @@ export default function FXPayoutPage() {
                           type="button"
                           onClick={() => {
                             setLocale(option.code);
+                            window.localStorage.setItem('fxpayout-locale', option.code);
+                            window.localStorage.setItem('fxpayout-locale-manual', '1');
                             setIsLanguageMenuOpen(false);
                           }}
                           className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#2F5BFF]"
@@ -344,27 +509,27 @@ export default function FXPayoutPage() {
             </div>
 
             <div className="hidden lg:block">
-              <div className="premium-card-shell group p-5">
+              <div className="premium-card-shell group rounded-[28px] border border-white/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.62),rgba(237,244,255,0.72))] p-5 shadow-[0_24px_60px_-36px_rgba(47,91,255,0.72)] backdrop-blur-xl">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#2F5BFF]">{t.summary.brokerPartner}</p>
                     <h3 className="text-[22px] font-bold text-gray-900 leading-none">{t.summary.partnerCount}</h3>
                   </div>
-                  <div className="rounded-2xl bg-[linear-gradient(135deg,rgba(255,255,255,0.35),rgba(164,205,255,0.42),rgba(47,91,255,0.72))] px-3 py-1.5 text-[11px] font-semibold tracking-[0.18em] text-white shadow-[0_10px_24px_-14px_rgba(47,91,255,0.9)] ring-1 ring-white/20 backdrop-blur-md">
+                  <div className="rounded-2xl bg-[linear-gradient(135deg,#2F5BFF,#4A7CFF,#78B6FF)] px-3 py-1.5 text-[11px] font-semibold tracking-[0.18em] text-white shadow-[0_10px_24px_-14px_rgba(47,91,255,0.9)] ring-1 ring-white/20">
                     {t.summary.badge}
                   </div>
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-3">
                   {brokers.slice(0, 4).map((broker, idx) => (
-                    <div key={idx} className="rounded-[20px] border border-white/35 bg-white/22 p-3 shadow-[0_12px_34px_-28px_rgba(15,23,42,0.7)] backdrop-blur-md">
+                    <div key={idx} className="card-3d-soft rounded-[20px] border border-[#E8F0FF] bg-white/72 p-3 shadow-[0_14px_30px_-28px_rgba(47,91,255,0.65)] backdrop-blur-md">
                       <div className="flex items-center gap-2.5">
                         <img
                           src={broker.name === 'Headway' ? '/headway-logo.png' : `https://www.google.com/s2/favicons?sz=128&domain=${broker.domain}`}
                           alt={broker.name}
                           width={32}
                           height={32}
-                          className="h-8 w-8 rounded-xl"
+                          className="h-8 w-8 rounded-xl border border-[#E8F0FF] bg-white"
                         />
                         <div>
                           <p className="text-xs font-semibold text-gray-900">{broker.name}</p>
@@ -375,7 +540,7 @@ export default function FXPayoutPage() {
                   ))}
                 </div>
 
-                <div className="mt-4 rounded-[26px] bg-[linear-gradient(180deg,rgba(11,26,56,0.22),rgba(14,30,62,0.14))] p-4 text-white shadow-[0_18px_50px_-32px_rgba(15,23,42,0.92)] ring-1 ring-white/12 backdrop-blur-xl">
+                <div className="mt-4 rounded-[26px] bg-[linear-gradient(135deg,#12245F,#2447B9,#4A7CFF)] p-4 text-white shadow-[0_20px_48px_-30px_rgba(15,23,42,0.92)] ring-1 ring-white/10">
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-[10px] font-semibold uppercase tracking-[0.42em] text-blue-100/72">{t.summary.averageRebateLabel}</span>
                     <span className="text-[32px] font-black leading-none tracking-[-0.08em] text-white drop-shadow-[0_0_18px_rgba(125,211,252,0.3)]">{t.summary.averageRebateValue}</span>
@@ -395,12 +560,10 @@ export default function FXPayoutPage() {
                 {t.broker.sectionTitle}
               </h2>
 
-              <div className="mb-6 rounded-[28px] border border-[#E5F0FF] bg-[linear-gradient(180deg,#F8FBFF_0%,#EEF4FF_100%)] p-5 shadow-[0_20px_50px_-38px_rgba(47,91,255,0.7)] lg:p-6">
+              <div className="card-3d mb-6 rounded-[28px] border border-[#E8F0FF] bg-[linear-gradient(180deg,#F8FBFF_0%,#EEF4FF_100%)] p-5 shadow-[0_20px_50px_-38px_rgba(47,91,255,0.7)] lg:p-6">
                 <div className="mb-4 flex items-center gap-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2F5BFF] to-[#4A7CFF] text-white shadow-[0_14px_30px_-18px_rgba(47,91,255,0.9)]">
-                    <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" aria-hidden="true">
-                      <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 3a1 1 0 1 1-1 1 1 1 0 0 1 1-1Zm1.5 11h-3a.75.75 0 0 1 0-1.5h1.25V12h-1.25a.75.75 0 0 1 0-1.5h2a.75.75 0 0 1 .75.75v3.75h1.25a.75.75 0 0 1 0 1.5Z" fill="currentColor" />
-                    </svg>
+                    <FileText className="h-6 w-6" aria-hidden="true" />
                   </div>
                   <div>
                     <h3 className="text-base font-semibold text-gray-900">{t.onboarding.title}</h3>
@@ -408,31 +571,40 @@ export default function FXPayoutPage() {
                   </div>
                 </div>
 
-                <div className="relative">
-                  <div className="absolute left-[1.45rem] top-3 bottom-3 w-px bg-gradient-to-b from-[#2F5BFF] via-[#89B8FF] to-transparent" aria-hidden="true" />
-                  <div className="space-y-4">
-                    {t.onboarding.steps.map((step, index) => (
-                      <div key={index} className="relative pl-14">
-                        <div className="absolute left-0 top-1.5 flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2F5BFF] to-[#4A7CFF] text-sm font-semibold text-white shadow-[0_16px_28px_-18px_rgba(47,91,255,0.95)]">
-                          {index + 1}
+                <div className="space-y-3">
+                  {t.onboarding.steps.map((step, index) => (
+                    <details key={index} className="card-3d-soft group rounded-2xl border border-white/70 bg-white/70 px-4 py-3 shadow-[0_12px_24px_-24px_rgba(47,91,255,0.55)]">
+                      <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#EFF4FF] text-sm font-semibold text-[#2F5BFF]">
+                            {index + 1}
+                          </span>
+                          <span className="text-sm font-semibold text-gray-900">{step.title}</span>
                         </div>
-                        <div className="rounded-2xl border border-white/70 bg-white/70 px-4 py-4 shadow-[0_14px_30px_-24px_rgba(47,91,255,0.55)]">
-                          <div className="flex items-center gap-2">
-                            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#EFF4FF] text-base" aria-hidden="true">
-                              {index === 0 ? '👤' : index === 1 ? '🧾' : index === 2 ? '🔗' : index === 3 ? '💳' : '📈'}
-                            </span>
-                            <span className="text-sm font-semibold text-gray-900">{step.title}</span>
-                          </div>
-                          <p className="mt-3 text-sm leading-6 text-gray-600">{step.description}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                        <span className="text-[#2F5BFF] transition group-open:rotate-180">
+                          <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden="true">
+                            <path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </span>
+                      </summary>
+                      <p className="mt-3 pl-11 text-sm leading-6 text-gray-600">{step.description}</p>
+                    </details>
+                  ))}
+                </div>
+
+                <div className="card-3d-soft mt-4 rounded-2xl border border-[#D9E7FF] bg-white/80 p-4 shadow-[0_10px_24px_-22px_rgba(47,91,255,0.7)]">
+                  <p className="text-sm leading-6 text-gray-700">{t.onboarding.helpCta}</p>
+                  <a
+                    href="#support-admin"
+                    className="mt-3 inline-flex items-center rounded-xl bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(47,91,255,0.9)] transition hover:opacity-95"
+                  >
+                    {t.onboarding.helpButton}
+                  </a>
                 </div>
               </div>
 
-              <div className="mb-6 rounded-[28px] border border-gray-200/70 bg-white/60 p-4 shadow-[0_16px_48px_-32px_rgba(47,91,255,0.7)] backdrop-blur-xl">
-                <div className="mb-4 inline-flex w-full items-center rounded-2xl bg-gray-100 p-1.5">
+              <div className="card-3d mb-6 rounded-[28px] border border-[#E8F0FF] bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FBFF_100%)] p-4 shadow-[0_18px_48px_-32px_rgba(47,91,255,0.65)] backdrop-blur-xl">
+                <div className="mb-4 inline-flex w-full items-center rounded-2xl bg-[#EEF3FF] p-1.5">
                   {regionTabs.map((tab) => {
                     const isActive = selectedTab === tab.key;
 
@@ -511,7 +683,7 @@ export default function FXPayoutPage() {
                       href={broker.ibLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block bg-white rounded-[20px] p-4 hover:shadow-lg transition border border-gray-100 lg:p-4 lg:hover:-translate-y-1 lg:hover:shadow-[0_18px_42px_-24px_rgba(47,91,255,0.6)]"
+                      className="card-3d block rounded-[24px] border border-[#EAF1FF] bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FBFF_100%)] p-4 shadow-[0_16px_36px_-28px_rgba(47,91,255,0.6)] transition hover:-translate-y-1 hover:border-[#CFE0FF] hover:shadow-[0_20px_52px_-32px_rgba(47,91,255,0.7)] lg:p-4"
                     >
                       <div className="flex items-center gap-4 mb-3 pb-3 border-b border-gray-200 lg:gap-3 lg:mb-3 lg:pb-3">
                         <img
@@ -543,7 +715,7 @@ export default function FXPayoutPage() {
                         {broker.instruments.map((instrument, iIdx) => (
                           <div
                             key={iIdx}
-                            className="bg-gradient-to-b from-blue-50/80 to-blue-100/60 rounded-xl p-2.5 text-center border border-blue-200/50"
+                            className="card-3d-soft rounded-xl border border-[#E6F0FF] bg-[linear-gradient(180deg,#F8FBFF_0%,#EEF4FF_100%)] p-2.5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]"
                           >
                             <p className="font-semibold text-gray-800 text-[11px] mb-1">
                               {t.broker.instruments?.[instrument.name as keyof typeof t.broker.instruments] ?? instrument.name}
@@ -592,8 +764,8 @@ export default function FXPayoutPage() {
             </div>
 
             {/* SUPPORT / ADMIN */}
-            <div className="mb-12 w-full lg:mb-10">
-              <div className="bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-sm lg:p-7">
+            <div id="support-admin" className="mb-12 w-full lg:mb-10">
+              <div className="card-3d bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-sm lg:p-7">
                 <h2 className="text-xl font-bold text-center mb-2 text-gray-900">
                   {t.support.title}
                 </h2>
@@ -607,7 +779,7 @@ export default function FXPayoutPage() {
                     href="https://wa.me/6282125597634"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 transition"
+                    className="card-3d-soft flex items-center justify-between px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 transition"
                   >
                     <span className="font-medium text-gray-800">
                       {t.support.one}
@@ -619,10 +791,10 @@ export default function FXPayoutPage() {
                   </a>
 
                   <a
-                    href="https://wa.me/628984785573"
+                    href="https://wa.me/639386828446"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 transition"
+                    className="card-3d-soft flex items-center justify-between px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 transition"
                   >
                     <span className="font-medium text-gray-800">
                       {t.support.two}
@@ -637,7 +809,7 @@ export default function FXPayoutPage() {
                     href="https://whatsapp.com/channel/0029VbBwSxf8fewzsFqX8B2f"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between px-5 py-4 rounded-xl bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white shadow-md hover:opacity-90 transition"
+                    className="card-3d-soft flex items-center justify-between px-5 py-4 rounded-xl bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white shadow-md hover:opacity-90 transition"
                   >
                     <span className="font-semibold">
                       {t.support.channel}
@@ -648,6 +820,96 @@ export default function FXPayoutPage() {
                     </span>
                   </a>
                 </div>
+              </div>
+            </div>
+
+            <div className="mb-12 w-full lg:mb-10">
+              <div className="card-3d rounded-[28px] border border-[#E8F0FF] bg-[linear-gradient(180deg,#F8FBFF_0%,#EEF4FF_100%)] p-5 shadow-[0_20px_50px_-38px_rgba(47,91,255,0.7)] lg:p-6">
+                <div className="mb-3 flex items-center justify-between">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#2F5BFF]">{t.reviews.title}</p>
+                    <span className="text-lg font-semibold text-gray-900">{averageRating}</span>
+                  </div>
+                  <div className="flex items-center gap-1 rounded-full bg-[#EFF4FF] px-3 py-1 text-[#2F5BFF]">
+                    <Star className="h-4 w-4 fill-current" />
+                    <span className="text-sm font-semibold">{averageRating}</span>
+                  </div>
+                </div>
+
+                <form onSubmit={handleSubmitReview} className="space-y-3">
+                  <div>
+                    <input
+                      type="text"
+                      value={reviewName}
+                      onChange={(event) => setReviewName(event.target.value)}
+                      placeholder={t.reviews.namePlaceholder}
+                      className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-[#2F5BFF] focus:ring-2 focus:ring-[#2F5BFF]/10"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">
+                      {t.reviews.ratingLabel}
+                    </label>
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((value) => (
+                        <button
+                          key={value}
+                          type="button"
+                          onClick={() => setReviewRating(value)}
+                          className="rounded-lg p-1"
+                          aria-label={`Rate ${value} stars`}
+                        >
+                          <Star className={`h-5 w-5 ${value <= reviewRating ? 'fill-current text-[#F59E0B]' : 'text-gray-300'}`} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <textarea
+                      value={reviewComment}
+                      onChange={(event) => setReviewComment(event.target.value)}
+                      placeholder={t.reviews.commentPlaceholder}
+                      rows={3}
+                      className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-[#2F5BFF] focus:ring-2 focus:ring-[#2F5BFF]/10"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full rounded-2xl bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_-16px_rgba(47,91,255,0.9)]"
+                  >
+                    {t.reviews.submit}
+                  </button>
+                </form>
+
+                <div className="mt-4 space-y-3">
+                  {visibleReviews.map((review) => (
+                    <div key={review.id} className="card-3d-soft rounded-2xl border border-gray-100 bg-gray-50 px-3 py-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-sm font-semibold text-gray-900">{review.name}</span>
+                        <span className="text-[10px] text-gray-400">{review.date}</span>
+                      </div>
+                      <div className="mt-1 flex gap-1">
+                        {[...Array(5)].map((_, index) => (
+                          <Star key={index} className={`h-3.5 w-3.5 ${index < review.rating ? 'fill-current text-[#F59E0B]' : 'text-gray-300'}`} />
+                        ))}
+                      </div>
+                      <p className="mt-2 text-sm leading-5 text-gray-600">{review.comment}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {sortedReviews.length > 5 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAllReviews((current) => !current)}
+                    className="mt-4 w-full rounded-xl border border-[#D6E5FF] bg-white px-4 py-2.5 text-sm font-semibold text-[#2F5BFF] transition hover:bg-[#F4F8FF]"
+                  >
+                    {showAllReviews ? t.reviews.showLess : `${t.reviews.viewAll} (${sortedReviews.length})`}
+                  </button>
+                )}
               </div>
             </div>
 

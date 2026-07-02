@@ -39,29 +39,41 @@ export const id = {
       {
         title: 'Buat Akun FXPayout Anda',
         description:
-          'Sebelum mendaftar broker, buat akun FXPayout Anda di https://fxpayout.com. Trader Dashboard digunakan untuk memvalidasi akun trading, memantau cashback, dan menarik rebate.',
+          'Buat akun resmi di https://fxpayout.com terlebih dahulu. Semua proses validasi akun trading dan pencairan rebate hanya diproses melalui dashboard FXPayout.',
       },
       {
         title: 'Daftarkan Broker Anda',
         description:
-          'Kembali ke halaman ini dan daftarkan broker pilihan Anda menggunakan alamat email yang sama dengan akun FXPayout Anda sebisa mungkin.',
+          'Pilih broker dari daftar partner lalu daftar menggunakan email yang sama seperti akun FXPayout agar proses sinkronisasi lebih cepat.',
       },
       {
         title: 'Hubungkan Akun Trading Anda',
         description:
-          'Setelah akun broker Anda dibuat, masuk ke FXPayout Trader Dashboard, buka halaman Brokers, lalu tambahkan nomor akun trading Anda agar sistem dapat mendeteksi aktivitas trading dan menghitung rebate secara otomatis.',
+          'Masuk ke Trader Dashboard FXPayout, buka menu Brokers, lalu input nomor akun trading Anda supaya sistem membaca histori trading secara otomatis.',
       },
       {
         title: 'Atur Metode Penarikan Anda',
         description:
-          'Tambahkan metode penarikan pilihan Anda, seperti rekening bank atau dompet crypto, untuk menerima pembayaran cashback dengan aman.',
+          'Atur metode penarikan (bank atau crypto wallet) di dashboard FXPayout. Rebate hanya bisa di-withdraw melalui website FXPayout.com.',
       },
       {
         title: 'Mulai Trading & Dapatkan Cashback',
         description:
-          'Setelah akun trading Anda berhasil divalidasi, cashback Anda akan dilacak secara otomatis di Trader Dashboard dan dapat ditarik sesuai kebijakan penarikan FXPayout.',
+          'Setelah akun tervalidasi, Anda bisa trading seperti biasa dan cashback akan tercatat otomatis di dashboard untuk ditarik saat sudah tersedia.',
       },
     ],
+    helpCta: 'Jika belum paham, hubungi admin sekarang. Tim admin akan bantu sampai Anda berhasil terdaftar.',
+    helpButton: 'Hubungi Admin Sekarang',
+  },
+  reviews: {
+    title: 'Ulasan Pengguna',
+    subtitle: 'Dipercaya oleh trader',
+    namePlaceholder: 'Nama Anda',
+    ratingLabel: 'Rating Anda',
+    commentPlaceholder: 'Bagikan pengalaman Anda tentang pendaftaran atau cashback.',
+    submit: 'Kirim ulasan',
+    viewAll: 'Lihat semua ulasan',
+    showLess: 'Tampilkan lebih sedikit',
   },
   broker: {
     sectionTitle: 'Daftar Broker Partner',
