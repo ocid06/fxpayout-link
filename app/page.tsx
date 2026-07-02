@@ -2,14 +2,13 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { FileText, Link2, Languages, TrendingUp, UserRound, Wallet, Star } from 'lucide-react';
+import { FileText, Link2, Languages, TrendingUp, UserRound, Wallet } from 'lucide-react';
 import { brokers } from '@/lib/brokers';
 import { translations, type Locale } from '@/locales';
 
 export default function FXPayoutPage() {
   type RegionTab = 'indonesia' | 'global' | 'all';
   type RebateFilter = 'all' | 'auto' | 'manual';
-  type ReviewLocale = Locale;
 
   const indonesiaBrokerNames = ['Finex', 'MIFX', 'HSB'];
   const regionTabs: { key: RegionTab }[] = [
@@ -24,80 +23,6 @@ export default function FXPayoutPage() {
   const [locale, setLocale] = useState<Locale>('en');
   const [isLocaleReady, setIsLocaleReady] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
-
-  type Review = {
-    id: number;
-    name: string;
-    country: string;
-    localeCode: ReviewLocale;
-    rating: number;
-    comment: string;
-    date: string;
-  };
-
-  const languageOrder: ReviewLocale[] = ['id', 'en', 'ar', 'ru', 'zh'];
-
-  const localeCountryMap: Record<ReviewLocale, string> = {
-    id: 'Indonesia',
-    en: 'United Kingdom',
-    ar: 'United Arab Emirates',
-    ru: 'Russia',
-    zh: 'China',
-  };
-
-  const initialReviews: Review[] = [
-    {
-      id: 1,
-      country: 'Indonesia',
-      localeCode: 'id',
-      name: 'Ari Setiawan',
-      rating: 5,
-      comment: 'Alur daftar sangat jelas. Akun broker saya berhasil terhubung kurang dari 10 menit.',
-      date: '2026-05-18',
-    },
-    {
-      id: 2,
-      country: 'United Kingdom',
-      localeCode: 'en',
-      name: 'Daniel Brooks',
-      rating: 5,
-      comment: 'The onboarding details are very clear, and cashback tracking works exactly as explained.',
-      date: '2026-05-22',
-    },
-    {
-      id: 3,
-      country: 'United Arab Emirates',
-      localeCode: 'ar',
-      name: 'Noura Al Mansoori',
-      rating: 4,
-      comment: 'الشرح واضح جداً، وفريق الدعم ساعدني حتى تم تفعيل الحساب بالكامل.',
-      date: '2026-06-02',
-    },
-    {
-      id: 4,
-      country: 'Russia',
-      localeCode: 'ru',
-      name: 'Mikhail Orlov',
-      rating: 5,
-      comment: 'Отличный сервис: зарегистрировался, подключил счет и сразу начал получать кэшбэк.',
-      date: '2026-06-17',
-    },
-    {
-      id: 5,
-      country: 'China',
-      localeCode: 'zh',
-      name: 'Li Wei',
-      rating: 5,
-      comment: '流程很清晰，客服响应很快，返利记录也非常透明。',
-      date: '2026-06-20',
-    },
-  ];
-
-  const [reviews, setReviews] = useState<Review[]>(initialReviews);
-  const [reviewName, setReviewName] = useState('');
-  const [reviewRating, setReviewRating] = useState(5);
-  const [reviewComment, setReviewComment] = useState('');
-  const [showAllReviews, setShowAllReviews] = useState(false);
 
   const t = translations[locale];
 
@@ -219,50 +144,6 @@ export default function FXPayoutPage() {
   }, []);
 
   useEffect(() => {
-    const storedReviews = window.localStorage.getItem('fxpayout-reviews');
-
-    if (storedReviews) {
-      try {
-        const parsedReviews = JSON.parse(storedReviews) as Partial<Review>[];
-
-        if (Array.isArray(parsedReviews) && parsedReviews.length > 0) {
-          const normalizedReviews: Review[] = parsedReviews
-            .map((review, index) => {
-              if (!review.name || !review.comment || typeof review.rating !== 'number') {
-                return null;
-              }
-
-              const localeCode = languageOrder.includes(review.localeCode as ReviewLocale)
-                ? (review.localeCode as ReviewLocale)
-                : 'en';
-
-              return {
-                id: typeof review.id === 'number' ? review.id : Date.now() + index,
-                name: review.name,
-                comment: review.comment,
-                rating: Math.min(5, Math.max(1, review.rating)),
-                date: typeof review.date === 'string' ? review.date : new Date().toLocaleDateString(),
-                localeCode,
-                country: typeof review.country === 'string' ? review.country : localeCountryMap[localeCode],
-              };
-            })
-            .filter((review): review is Review => review !== null);
-
-          if (normalizedReviews.length > 0) {
-            setReviews(normalizedReviews);
-          }
-        }
-      } catch {
-        window.localStorage.removeItem('fxpayout-reviews');
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem('fxpayout-reviews', JSON.stringify(reviews));
-  }, [reviews]);
-
-  useEffect(() => {
     window.sessionStorage.setItem('fxpayout-broker-tab', selectedTab);
   }, [selectedTab]);
 
@@ -306,52 +187,6 @@ export default function FXPayoutPage() {
     visibleBrokers.length === brokers.length
       ? t.broker.countAvailable(brokers.length)
       : t.broker.countShowing(visibleBrokers.length, brokers.length);
-
-  const averageRating = reviews.length
-    ? (reviews.reduce((total, review) => total + review.rating, 0) / reviews.length).toFixed(1)
-    : '0.0';
-
-  const sortedReviews = useMemo(() => {
-    const shuffledReviews = [...reviews];
-
-    for (let index = shuffledReviews.length - 1; index > 0; index -= 1) {
-      const randomIndex = Math.floor(Math.random() * (index + 1));
-      const current = shuffledReviews[index];
-      shuffledReviews[index] = shuffledReviews[randomIndex];
-      shuffledReviews[randomIndex] = current;
-    }
-
-    return shuffledReviews;
-  }, [reviews]);
-
-  const visibleReviews = showAllReviews ? sortedReviews : sortedReviews.slice(0, 5);
-
-  const handleSubmitReview = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const name = reviewName.trim();
-    const comment = reviewComment.trim();
-
-    if (!name || !comment) {
-      return;
-    }
-
-    const newReview: Review = {
-      id: Date.now(),
-      name,
-      country: localeCountryMap[locale],
-      localeCode: locale,
-      rating: reviewRating,
-      comment,
-      date: new Date().toLocaleDateString(),
-    };
-
-    setReviews((currentReviews) => [newReview, ...currentReviews]);
-    setReviewName('');
-    setReviewRating(5);
-    setReviewComment('');
-    setShowAllReviews(true);
-  };
 
   const resetFilters = () => {
     setSearchTerm('');
@@ -532,7 +367,7 @@ export default function FXPayoutPage() {
                           className="h-8 w-8 rounded-xl border border-[#E8F0FF] bg-white"
                         />
                         <div>
-                          <p className="text-xs font-semibold text-gray-900">{broker.name}</p>
+                          <p className="text-xs font-semibold text-gray-900">{broker.name.trim()}</p>
                           <p className="text-[9px] text-gray-500">{broker.type === 'auto' ? t.broker.typeLabels.auto : broker.type === 'manual' ? t.broker.typeLabels.manual : broker.type === 'volume' ? t.broker.typeLabels.volume : broker.type}</p>
                         </div>
                       </div>
@@ -696,7 +531,7 @@ export default function FXPayoutPage() {
 
                         <div className="flex-1">
                           <h3 className="font-bold text-base" style={{ color: '#111827' }}>
-                            {broker.name}
+                            {broker.name.trim()}
                           </h3>
                         </div>
 
@@ -820,96 +655,6 @@ export default function FXPayoutPage() {
                     </span>
                   </a>
                 </div>
-              </div>
-            </div>
-
-            <div className="mb-12 w-full lg:mb-10">
-              <div className="card-3d rounded-[28px] border border-[#E8F0FF] bg-[linear-gradient(180deg,#F8FBFF_0%,#EEF4FF_100%)] p-5 shadow-[0_20px_50px_-38px_rgba(47,91,255,0.7)] lg:p-6">
-                <div className="mb-3 flex items-center justify-between">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#2F5BFF]">{t.reviews.title}</p>
-                    <span className="text-lg font-semibold text-gray-900">{averageRating}</span>
-                  </div>
-                  <div className="flex items-center gap-1 rounded-full bg-[#EFF4FF] px-3 py-1 text-[#2F5BFF]">
-                    <Star className="h-4 w-4 fill-current" />
-                    <span className="text-sm font-semibold">{averageRating}</span>
-                  </div>
-                </div>
-
-                <form onSubmit={handleSubmitReview} className="space-y-3">
-                  <div>
-                    <input
-                      type="text"
-                      value={reviewName}
-                      onChange={(event) => setReviewName(event.target.value)}
-                      placeholder={t.reviews.namePlaceholder}
-                      className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-[#2F5BFF] focus:ring-2 focus:ring-[#2F5BFF]/10"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">
-                      {t.reviews.ratingLabel}
-                    </label>
-                    <div className="flex gap-1">
-                      {[1, 2, 3, 4, 5].map((value) => (
-                        <button
-                          key={value}
-                          type="button"
-                          onClick={() => setReviewRating(value)}
-                          className="rounded-lg p-1"
-                          aria-label={`Rate ${value} stars`}
-                        >
-                          <Star className={`h-5 w-5 ${value <= reviewRating ? 'fill-current text-[#F59E0B]' : 'text-gray-300'}`} />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <textarea
-                      value={reviewComment}
-                      onChange={(event) => setReviewComment(event.target.value)}
-                      placeholder={t.reviews.commentPlaceholder}
-                      rows={3}
-                      className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-[#2F5BFF] focus:ring-2 focus:ring-[#2F5BFF]/10"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full rounded-2xl bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_-16px_rgba(47,91,255,0.9)]"
-                  >
-                    {t.reviews.submit}
-                  </button>
-                </form>
-
-                <div className="mt-4 space-y-3">
-                  {visibleReviews.map((review) => (
-                    <div key={review.id} className="card-3d-soft rounded-2xl border border-gray-100 bg-gray-50 px-3 py-3">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-sm font-semibold text-gray-900">{review.name}</span>
-                        <span className="text-[10px] text-gray-400">{review.date}</span>
-                      </div>
-                      <div className="mt-1 flex gap-1">
-                        {[...Array(5)].map((_, index) => (
-                          <Star key={index} className={`h-3.5 w-3.5 ${index < review.rating ? 'fill-current text-[#F59E0B]' : 'text-gray-300'}`} />
-                        ))}
-                      </div>
-                      <p className="mt-2 text-sm leading-5 text-gray-600">{review.comment}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {sortedReviews.length > 5 && (
-                  <button
-                    type="button"
-                    onClick={() => setShowAllReviews((current) => !current)}
-                    className="mt-4 w-full rounded-xl border border-[#D6E5FF] bg-white px-4 py-2.5 text-sm font-semibold text-[#2F5BFF] transition hover:bg-[#F4F8FF]"
-                  >
-                    {showAllReviews ? t.reviews.showLess : `${t.reviews.viewAll} (${sortedReviews.length})`}
-                  </button>
-                )}
               </div>
             </div>
 

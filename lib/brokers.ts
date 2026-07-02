@@ -23,7 +23,7 @@ export const brokers: Broker[] = [
   // =========================
 
    {
-    name: "TMGM ",
+    name: "TMGM",
     type: "manual",
     ibLink: "https://portal.tmgm.com/register?r_code=IB1750254951D",
     domain: "tmgm.com",
@@ -362,6 +362,8 @@ export const brokers: Broker[] = [
       { name: "CRYPTO", rebate: 3 }
     ]
   }
+
+
 
 
 ]
