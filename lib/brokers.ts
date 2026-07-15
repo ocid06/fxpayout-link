@@ -25,7 +25,7 @@ export const brokers: Broker[] = [
    {
     name: "TMGM",
     type: "manual",
-    ibLink: "https://portal.tmgm.com/register?r_code=IB1750254951D",
+    ibLink: "https://portal.tmgm-tmc.com/register?node=MzUyNjY3&language=en",
     domain: "tmgm.com",
     instruments: [
       { name: "EUR/USD", rebate: 5 },
