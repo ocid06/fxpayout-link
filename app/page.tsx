@@ -744,7 +744,7 @@ export default function FXPayoutPage() {
                   </a>
 
                   <a
-                    href="https://wa.me/639386828446"
+                    href="https://wa.me/628212888890"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="card-3d-soft flex items-center justify-between px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 transition"
