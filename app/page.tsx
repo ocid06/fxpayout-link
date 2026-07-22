@@ -1,5 +1,5 @@
 'use client';
-
+import { createPortal } from 'react-dom';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { FileText, Link2, Languages, TrendingUp, UserRound, Wallet } from 'lucide-react';
@@ -23,6 +23,9 @@ export default function FXPayoutPage() {
   const [locale, setLocale] = useState<Locale>('en');
   const [isLocaleReady, setIsLocaleReady] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+  const [selectedRegisterBroker, setSelectedRegisterBroker] = useState<
+  (typeof brokers)[number] | null
+>(null);
 
   const t = translations[locale];
 
@@ -513,14 +516,45 @@ export default function FXPayoutPage() {
               <div className="space-y-3 max-w-full lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:items-stretch">
                 {visibleBrokers.length > 0 ? (
                   visibleBrokers.map((broker, idx) => (
-                    <a
-                      key={idx}
-                      href={broker.ibLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="card-3d block rounded-[24px] border border-[#EAF1FF] bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FBFF_100%)] p-4 shadow-[0_16px_36px_-28px_rgba(47,91,255,0.6)] transition hover:-translate-y-1 hover:border-[#CFE0FF] hover:shadow-[0_20px_52px_-32px_rgba(47,91,255,0.7)] lg:p-4"
-                    >
-                      <div className="flex items-center gap-4 mb-3 pb-3 border-b border-gray-200 lg:gap-3 lg:mb-3 lg:pb-3">
+<div
+  key={idx}
+  role="link"
+  tabIndex={0}
+  onClick={() => {
+    if (broker.registerOptions?.length) {
+      setSelectedRegisterBroker(broker);
+      return;
+    }
+
+    if (broker.ibLink) {
+      window.open(
+        broker.ibLink,
+        '_blank',
+        'noopener,noreferrer'
+      );
+    }
+  }}
+  onKeyDown={(event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+
+    event.preventDefault();
+
+    if (broker.registerOptions?.length) {
+      setSelectedRegisterBroker(broker);
+      return;
+    }
+
+    if (broker.ibLink) {
+      window.open(
+        broker.ibLink,
+        '_blank',
+        'noopener,noreferrer'
+      );
+    }
+  }}
+  className="card-3d block cursor-pointer rounded-[24px] border border-[#EAF1FF] bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FBFF_100%)] p-4 shadow-[0_16px_36px_-28px_rgba(47,91,255,0.6)] transition hover:-translate-y-1 hover:border-[#CFE0FF] hover:shadow-[0_20px_52px_-32px_rgba(47,91,255,0.7)] lg:p-4"
+>
+                        <div className="flex items-center gap-4 mb-3 pb-3 border-b border-gray-200 lg:gap-3 lg:mb-3 lg:pb-3">
                         <img
                           src={broker.name === 'Headway' ? '/headway-logo.png' : `https://www.google.com/s2/favicons?sz=128&domain=${broker.domain}`}
                           alt={broker.name}
@@ -576,7 +610,7 @@ export default function FXPayoutPage() {
                           {t.broker.applyNow}
                         </span>
                       </div>
-                    </a>
+                    </div>
                   ))
                 ) : (
                   <div className="col-span-full rounded-[28px] border border-dashed border-gray-300 bg-white/60 px-8 py-14 text-center lg:col-span-3">
@@ -598,6 +632,90 @@ export default function FXPayoutPage() {
               </div>
             </div>
 
+{/* BROKER REGISTRATION MODAL */}
+{selectedRegisterBroker &&
+  selectedRegisterBroker.registerOptions?.length &&
+  createPortal(
+    <div
+      className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/45 p-4 backdrop-blur-sm"
+      onClick={() => setSelectedRegisterBroker(null)}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="broker-register-title"
+        onClick={(event) => event.stopPropagation()}
+        className="relative w-full max-w-md rounded-[28px] border border-white/60 bg-white p-6 shadow-[0_30px_80px_-20px_rgba(15,23,42,0.45)]"
+      >
+        <button
+          type="button"
+          onClick={() => setSelectedRegisterBroker(null)}
+          className="absolute right-5 top-5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-xl text-gray-500 transition hover:bg-gray-200 hover:text-gray-900"
+          aria-label="Close"
+        >
+          ×
+        </button>
+
+        <div className="mb-6 flex items-center gap-4 pr-12">
+          <img
+            src={`https://www.google.com/s2/favicons?sz=128&domain=${selectedRegisterBroker.domain}`}
+            alt={selectedRegisterBroker.name}
+            width={56}
+            height={56}
+            className="h-14 w-14 rounded-2xl border border-[#E8F0FF] bg-white p-1"
+          />
+
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#2F5BFF]">
+              Register Broker
+            </p>
+
+            <h3
+              id="broker-register-title"
+              className="mt-1 text-xl font-bold text-gray-900"
+            >
+              {selectedRegisterBroker.name}
+            </h3>
+          </div>
+        </div>
+
+        <p className="mb-4 text-sm leading-6 text-gray-600">
+          Pilih jenis akun yang ingin Anda daftarkan.
+        </p>
+
+        <div className="space-y-3">
+          {selectedRegisterBroker.registerOptions.map((option) => (
+            <a
+              key={option.name}
+              href={option.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex cursor-pointer items-center justify-between rounded-2xl border border-[#DCE8FF] bg-[#F8FBFF] px-5 py-4 transition hover:border-[#2F5BFF] hover:bg-[#EEF4FF]"
+            >
+              <div>
+                <p className="text-xs font-medium text-gray-500">
+                  Account Type
+                </p>
+
+                <p className="mt-1 font-bold text-gray-900">
+                  {option.name}
+                </p>
+              </div>
+
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2F5BFF] text-lg text-white transition group-hover:translate-x-1">
+                →
+              </span>
+            </a>
+          ))}
+        </div>
+
+        <p className="mt-5 text-center text-xs leading-5 text-gray-400">
+          Anda akan diarahkan ke halaman registrasi resmi broker.
+        </p>
+      </div>
+    </div>,
+    document.body
+  )}
             {/* SUPPORT / ADMIN */}
             <div id="support-admin" className="mb-12 w-full lg:mb-10">
               <div className="card-3d bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-sm lg:p-7">

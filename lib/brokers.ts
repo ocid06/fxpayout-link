@@ -11,7 +11,11 @@ export type BrokerType = 'auto' | 'manual' | 'volume'
 export type Broker = {
   name: string
   type: BrokerType
-  ibLink: string
+  ibLink?: string
+  registerOptions?: {
+    name: string
+    url: string
+  }[]
   domain: string
   instruments: Instrument[]
 }
@@ -22,17 +26,26 @@ export const brokers: Broker[] = [
   // DATA SESUAI SCREENSHOT
   // =========================
 
-   {
-    name: "TMGM",
-    type: "manual",
-    ibLink: "https://portal.tmgm-tmc.com/register?node=MzUyNjY3&language=en",
-    domain: "tmgm.com",
-    instruments: [
-      { name: "EUR/USD", rebate: 5 },
-      { name: "XAU/USD", rebate: 18 },
-      { name: "CRYPTO", rebate: 1 }
-    ]
-  },
+{
+  name: "TMGM",
+  type: "manual",
+  registerOptions: [
+    {
+      name: "STANDARD",
+      url: "https://portal.tmgm-tmc.com/register?node=MzUyNjY3&language=en"
+    },
+    {
+      name: "CENT",
+      url: "https://portal.tmgm-tmc.com/register?node=MzUyNjA4&language=en"
+    }
+  ],
+  domain: "tmgm.com",
+  instruments: [
+    { name: "EUR/USD", rebate: 5 },
+    { name: "XAU/USD", rebate: 18 },
+    { name: "CRYPTO", rebate: 1 }
+  ]
+},
 
   {
     name: "Valetax",
