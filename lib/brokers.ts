@@ -291,6 +291,18 @@ export const brokers: Broker[] = [
     ]
   },
 
+{
+    name: "Markets4you",
+    type: "manual",
+    ibLink: "https://account.markets4you.online/en/user-registration/?affid=tvborws",
+    domain: "markets4you.com",
+    instruments: [
+      { name: "EUR/USD", rebate: 3 },
+      { name: "XAU/USD", rebate: 3 },
+      { name: "CRYPTO", rebate: 3 }
+    ]
+  },
+
   {
     name: "OANDA",
     type: "manual",
