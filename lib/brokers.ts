@@ -120,10 +120,10 @@ export const brokers: Broker[] = [
   },
 
   {
-    name: "OctaFX/Elev8",
+    name: "Elev8",
     type: "manual",
-    ibLink: "https://octa.click/bJLCLmX8zDZ?ib=47807098",
-    domain: "octafx.com",
+    ibLink: "https://clickto.trade/bJLCLmX8zDZ?ib=47807098",
+    domain: "eleveightmarkets.net/",
     instruments: [
       { name: "eurUsd", rebate: 8 },
       { name: "xauUsd", rebate: 8 },
@@ -254,7 +254,7 @@ export const brokers: Broker[] = [
   {
     name: "Deriv",
     type: "volume",
-    ibLink: "https://deriv.partners/rx?sidc=07DDC1C5-AE63-4FC9-A23D-C6DA444F9225&utm_campaign=dynamicworks&utm_medium=affiliate&utm_source=CU279711",
+    ibLink: "https://t.deriv.link?t=CH9N2Q7ARXR5",
     domain: "deriv.com",
     instruments: [
       { name: "forex", rebateText: "upTo40TradingFee" },
