@@ -91,6 +91,8 @@ export const id = {
     countAvailable: (count: number) => `${count} Broker Tersedia`,
     countShowing: (shown: number, total: number) => `Menampilkan ${shown} dari ${total} Broker`,
     applyNow: 'Daftar Sekarang →',
+    copyIbLink: 'Salin Link IB',
+    copied: 'Tersalin!',
     instruments: {
       eurUsd: 'EUR/USD',
       xauUsd: 'XAU/USD',

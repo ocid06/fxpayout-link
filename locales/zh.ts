@@ -91,6 +91,8 @@ export const zh = {
     countAvailable: (count: number) => `${count} 家经纪商可用`,
     countShowing: (shown: number, total: number) => `显示 ${shown} / ${total} 家经纪商`,
     applyNow: '立即注册 →',
+    copyIbLink: '复制 IB 链接',
+    copied: '已复制！',
     instruments: {
       eurUsd: 'EUR/USD',
       xauUsd: 'XAU/USD',

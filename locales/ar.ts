@@ -91,6 +91,8 @@ export const ar = {
     countAvailable: (count: number) => `${count} وسيطًا متاحًا`,
     countShowing: (shown: number, total: number) => `عرض ${shown} من ${total} وسيطًا`,
     applyNow: 'سجل الآن →',
+    copyIbLink: 'نسخ رابط IB',
+    copied: 'تم النسخ!',
     instruments: {
       eurUsd: 'EUR/USD',
       xauUsd: 'XAU/USD',

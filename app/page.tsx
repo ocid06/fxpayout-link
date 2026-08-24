@@ -2,7 +2,7 @@
 import { createPortal } from 'react-dom';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { FileText, Link2, Languages, TrendingUp, UserRound, Wallet } from 'lucide-react';
+import { Check, Copy, FileText, Link2, Languages, TrendingUp, UserRound, Wallet } from 'lucide-react';
 import { brokers } from '@/lib/brokers';
 import { translations, type Locale } from '@/locales';
 
@@ -23,6 +23,7 @@ export default function FXPayoutPage() {
   const [locale, setLocale] = useState<Locale>('en');
   const [isLocaleReady, setIsLocaleReady] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+  const [copiedBrokerName, setCopiedBrokerName] = useState<string | null>(null);
   const [selectedRegisterBroker, setSelectedRegisterBroker] = useState<
   (typeof brokers)[number] | null
 >(null);
@@ -194,6 +195,37 @@ export default function FXPayoutPage() {
   const resetFilters = () => {
     setSearchTerm('');
     setRebateFilter('all');
+  };
+
+  const handleCopyIbLink = async (broker: (typeof brokers)[number]) => {
+    const copyTarget = broker.ibLink ?? broker.registerOptions?.[0]?.url;
+
+    if (!copyTarget) {
+      return;
+    }
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(copyTarget);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = copyTarget;
+        textarea.setAttribute('readonly', 'true');
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+
+      setCopiedBrokerName(broker.name.trim());
+      window.setTimeout(() => {
+        setCopiedBrokerName((current) => (current === broker.name.trim() ? null : current));
+      }, 1500);
+    } catch (error) {
+      console.error('Failed to copy IB link:', error);
+    }
   };
 
   return (
@@ -605,7 +637,28 @@ export default function FXPayoutPage() {
                         ))}
                       </div>
 
-                      <div className="mt-3 text-right">
+                      <div className="mt-3 flex items-center justify-between gap-2">
+                        <button
+                          type="button"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            void handleCopyIbLink(broker);
+                          }}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-[#DDE8FF] bg-white px-2.5 py-1.5 text-[11px] font-semibold text-[#2F5BFF] shadow-[0_8px_18px_-16px_rgba(47,91,255,0.6)] transition hover:border-[#C5D7FF] hover:bg-[#F5F8FF]"
+                        >
+                          {copiedBrokerName === broker.name.trim() ? (
+                            <>
+                              <Check className="h-3.5 w-3.5" />
+                              <span>{t.broker.copied}</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="h-3.5 w-3.5" />
+                              <span>{t.broker.copyIbLink}</span>
+                            </>
+                          )}
+                        </button>
+
                         <span className="inline-block px-3 py-1.5 bg-[#2F5BFF] text-white text-[11px] font-semibold rounded-lg">
                           {t.broker.applyNow}
                         </span>

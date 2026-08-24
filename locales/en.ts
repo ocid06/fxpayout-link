@@ -91,6 +91,8 @@ export const en = {
     countAvailable: (count: number) => `${count} Brokers Available`,
     countShowing: (shown: number, total: number) => `Showing ${shown} of ${total} Brokers`,
     applyNow: 'Register Now →',
+    copyIbLink: 'Copy IB link',
+    copied: 'Copied!',
     instruments: {
       eurUsd: 'EUR/USD',
       xauUsd: 'XAU/USD',

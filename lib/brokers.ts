@@ -29,6 +29,7 @@ export const brokers: Broker[] = [
 {
   name: "TMGM",
   type: "manual",
+  ibLink: "https://portal.tmgm-tmc.com/register?node=MzUyNjY3&language=en",
   registerOptions: [
     {
       name: "STANDARD",
