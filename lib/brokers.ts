@@ -121,6 +121,18 @@ export const brokers: Broker[] = [
   },
 
   {
+    name: "JunoMarkets",
+    type: "manual",
+    ibLink: "https://my.junoportal.com/en/auth?refercode=3GPmiy",
+    domain: "junomarkets.com",
+    instruments: [
+      { name: "EUR/USD", rebate: 3 },
+      { name: "XAU/USD", rebate: 3 },
+      { name: "CRYPTO", rebate: 2 }
+    ]
+  },
+
+  {
     name: "Elev8",
     type: "manual",
     ibLink: "https://clickto.trade/bJLCLmX8zDZ?ib=47807098",
@@ -277,6 +289,17 @@ export const brokers: Broker[] = [
       { name: "EUR/USD", rebate: 10 },
       { name: "XAU/USD", rebate: 15 },
       { name: "CRYPTO", rebate: 10 }
+    ]
+  },
+
+  {
+    name: "Blueberry Markets",
+    type: "manual",
+    ibLink: "https://portal.blueberrymarkets.com/rc/gj12bobj08",
+    domain: "blueberrymarkets.com",
+    instruments: [
+      { name: "EUR/USD", rebate: 10 },
+      { name: "XAU/USD", rebate: 12 }
     ]
   },
 
