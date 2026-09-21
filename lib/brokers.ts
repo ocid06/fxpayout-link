@@ -303,6 +303,17 @@ export const brokers: Broker[] = [
     ]
   },
 
+{
+  name: "Dupoin",
+  type: "manual",
+  ibLink: "https://i.dupoin.vip/KzDiUP3Nr",
+  domain: "https://www.dupoin.co.id/",
+  instruments: [
+    { name: "Forex", rebate: 17 },
+    { name: "XAU/USD", rebate: 17 }
+  ]
+},
+
   {
     name: "Headway",
     type: "auto",
@@ -319,7 +330,7 @@ export const brokers: Broker[] = [
     name: "Markets4you",
     type: "manual",
     ibLink: "https://account.markets4you.online/en/user-registration/?affid=tvborws",
-    domain: "markets4you.com",
+    domain: "https://www.markets4you.com",
     instruments: [
       { name: "EUR/USD", rebate: 3 },
       { name: "XAU/USD", rebate: 3 },
