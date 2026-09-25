@@ -219,7 +219,7 @@ export const brokers: Broker[] = [
   {
     name: "Vantage",
     type: "manual",
-    ibLink: "https://www.vantagemarketsea.com/id/open-live-account/?affid=MjA3OTY2Mzk=",
+    ibLink: "https://vigco.co/la-s1com-inv/id/EJSu0LiT",
     domain: "vantagemarketsea.com",
     instruments: [
       { name: "EUR/USD", rebate: 7.2 },
