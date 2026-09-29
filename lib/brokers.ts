@@ -159,7 +159,7 @@ export const brokers: Broker[] = [
   {
     name: "VT Markets",
     type: "manual",
-    ibLink: "https://www.vtmarkets.com/trade-now/?affid=22395035",
+    ibLink: "https://vtm.pro/la5-com/global/zSSqv7i8",
     domain: "vtmarkets.com",
     instruments: [
       { name: "EUR/USD", rebate: 7 },
