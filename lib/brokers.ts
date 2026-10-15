@@ -163,7 +163,7 @@ export const brokers: Broker[] = [
     domain: "vtmarkets.com",
     instruments: [
       { name: "EUR/USD", rebate: 7 },
-      { name: "XAU/USD", rebate: 11 },
+      { name: "XAU/USD", rebate: 12 },
       { name: "CRYPTO", rebate: 6 }
     ]
   },
@@ -174,8 +174,8 @@ export const brokers: Broker[] = [
   ibLink: "https://ultgo.com/la-com/id/LPtmn9kq",
   domain: "ultimamarkets.com",
   instruments: [
-    { name: "EUR/USD", rebate: 11 },
-    { name: "XAU/USD", rebate: 12 },
+    { name: "EUR/USD", rebate: 10 },
+    { name: "XAU/USD", rebate: 15 },
     { name: "CRYPTO", rebate: 6 }
   ]
 },
@@ -223,7 +223,7 @@ export const brokers: Broker[] = [
     domain: "vantagemarketsea.com",
     instruments: [
       { name: "EUR/USD", rebate: 7.2 },
-      { name: "XAU/USD", rebate: 10.4 },
+      { name: "XAU/USD", rebate: 14 },
       { name: "AUD/USD", rebate: 1.6 }
     ]
   },
