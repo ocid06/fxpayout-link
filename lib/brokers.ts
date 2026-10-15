@@ -222,9 +222,9 @@ export const brokers: Broker[] = [
     ibLink: "https://vigco.co/la-s1com-inv/id/EJSu0LiT",
     domain: "vantagemarketsea.com",
     instruments: [
-      { name: "EUR/USD", rebate: 7.2 },
-      { name: "XAU/USD", rebate: 14 },
-      { name: "AUD/USD", rebate: 1.6 }
+      { name: "EUR/USD", rebate: 10 },
+      { name: "XAU/USD", rebate: 15 },
+      { name: "AUD/USD", rebate: 10 }
     ]
   },
 
