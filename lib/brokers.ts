@@ -428,4 +428,30 @@ export const brokers: Broker[] = [
 
 ]
 
+export const brokerDisplayGroups = {
+  primary: ["TMGM", "Valetax", "Exness"],
+  trusted: ["XM", "PU Prime", "VT Markets", "Ultima Markets", "Vantage", "HFM"],
+} as const
+
+const priorityBrokerOrder: readonly string[] = [
+  ...brokerDisplayGroups.primary,
+  ...brokerDisplayGroups.trusted,
+]
+
+export const sortBrokersForDisplay = (items: readonly Broker[]): Broker[] => {
+  const priority = new Map(priorityBrokerOrder.map((name, index) => [name, index] as const))
+
+  return [...items].sort((left, right) => {
+    const leftOrder = priority.get(left.name)
+    const rightOrder = priority.get(right.name)
+
+    if (leftOrder !== undefined && rightOrder !== undefined) return leftOrder - rightOrder
+    if (leftOrder !== undefined) return -1
+    if (rightOrder !== undefined) return 1
+    if (left.name === "Elev8") return right.name === "Elev8" ? 0 : 1
+    if (right.name === "Elev8") return -1
+    return 0
+  })
+}
+
 export default brokers

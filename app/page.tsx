@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Check, Copy, FileText, Link2, Languages, TrendingUp, UserRound, Wallet } from 'lucide-react';
-import { brokers } from '@/lib/brokers';
+import { brokers, sortBrokersForDisplay } from '@/lib/brokers';
 import { translations, type Locale } from '@/locales';
 
 export default function FXPayoutPage() {
@@ -169,7 +169,7 @@ export default function FXPayoutPage() {
   const visibleBrokers = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
 
-    return brokers.filter((broker) => {
+    const filteredBrokers = brokers.filter((broker) => {
       const brokerName = broker.name.trim().toLowerCase();
       const isIndonesiaTab = selectedTab === 'indonesia';
       const isGlobalTab = selectedTab === 'global';
@@ -185,6 +185,8 @@ export default function FXPayoutPage() {
 
       return matchesRegion && matchesSearch && matchesRebate;
     });
+
+    return sortBrokersForDisplay(filteredBrokers);
   }, [searchTerm, selectedTab, rebateFilter]);
 
   const brokerCountLabel =
