@@ -79,7 +79,7 @@ export const brokers: Broker[] = [
     domain: "puprime.com",
     instruments: [
       { name: "eurUsd", rebate: 6.5 },
-      { name: "xauUsd", rebate: 9.5 },
+      { name: "xauUsd", rebate: 15 },
       { name: "crypto", rebate: 5.2 }
     ]
   },
