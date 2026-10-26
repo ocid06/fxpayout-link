@@ -28,6 +28,33 @@ export default function FXPayoutPage() {
   (typeof brokers)[number] | null
 >(null);
 
+  const [accountModal, setAccountModal] = useState<{
+    broker: (typeof brokers)[number];
+    mode: 'copy' | 'register';
+  } | null>(null);
+
+  const getSelectedAccount = (broker: (typeof brokers)[number]) => broker.accountTypes?.[0];
+
+  const getBrokerLink = (broker: (typeof brokers)[number]) =>
+    broker.ibLink ?? broker.registerOptions?.[0]?.url;
+
+  const openBroker = (broker: (typeof brokers)[number]) => {
+    if (broker.accountTypes) {
+      setAccountModal({ broker, mode: 'register' });
+      return;
+    }
+
+    if (broker.registerOptions?.length) {
+      setSelectedRegisterBroker(broker);
+      return;
+    }
+
+    const target = getBrokerLink(broker);
+    if (target) {
+      window.open(target, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   const t = translations[locale];
 
   const rebateOptions = [
@@ -199,8 +226,8 @@ export default function FXPayoutPage() {
     setRebateFilter('all');
   };
 
-  const handleCopyIbLink = async (broker: (typeof brokers)[number]) => {
-    const copyTarget = broker.ibLink ?? broker.registerOptions?.[0]?.url;
+  const handleCopyIbLink = async (broker: (typeof brokers)[number], urlOverride?: string) => {
+    const copyTarget = urlOverride ?? getBrokerLink(broker);
 
     if (!copyTarget) {
       return;
@@ -397,7 +424,7 @@ export default function FXPayoutPage() {
                     <div key={idx} className="card-3d-soft rounded-[20px] border border-[#E8F0FF] bg-white/72 p-3 shadow-[0_14px_30px_-28px_rgba(47,91,255,0.65)] backdrop-blur-md">
                       <div className="flex items-center gap-2.5">
                         <img
-                          src={broker.name === 'Headway' ? '/headway-logo.png' : `https://www.google.com/s2/favicons?sz=128&domain=${broker.domain}`}
+                          src={broker.logo ?? (broker.name === 'Headway' ? '/headway-logo.png' : `https://www.google.com/s2/favicons?sz=128&domain=${broker.domain}`)}
                           alt={broker.name}
                           width={32}
                           height={32}
@@ -549,48 +576,27 @@ export default function FXPayoutPage() {
 
               <div className="space-y-3 max-w-full lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:items-stretch">
                 {visibleBrokers.length > 0 ? (
-                  visibleBrokers.map((broker, idx) => (
+                  visibleBrokers.map((broker, idx) => {
+                    const selectedAccount = getSelectedAccount(broker);
+
+                    return (
 <div
   key={idx}
   role="link"
   tabIndex={0}
-  onClick={() => {
-    if (broker.registerOptions?.length) {
-      setSelectedRegisterBroker(broker);
-      return;
-    }
-
-    if (broker.ibLink) {
-      window.open(
-        broker.ibLink,
-        '_blank',
-        'noopener,noreferrer'
-      );
-    }
-  }}
+  onClick={() => openBroker(broker)}
   onKeyDown={(event) => {
+    if (event.target !== event.currentTarget) return;
     if (event.key !== 'Enter' && event.key !== ' ') return;
 
     event.preventDefault();
-
-    if (broker.registerOptions?.length) {
-      setSelectedRegisterBroker(broker);
-      return;
-    }
-
-    if (broker.ibLink) {
-      window.open(
-        broker.ibLink,
-        '_blank',
-        'noopener,noreferrer'
-      );
-    }
+    openBroker(broker);
   }}
   className="card-3d block cursor-pointer rounded-[24px] border border-[#EAF1FF] bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FBFF_100%)] p-4 shadow-[0_16px_36px_-28px_rgba(47,91,255,0.6)] transition hover:-translate-y-1 hover:border-[#CFE0FF] hover:shadow-[0_20px_52px_-32px_rgba(47,91,255,0.7)] lg:p-4"
 >
                         <div className="flex items-center gap-4 mb-3 pb-3 border-b border-gray-200 lg:gap-3 lg:mb-3 lg:pb-3">
                         <img
-                          src={broker.name === 'Headway' ? '/headway-logo.png' : `https://www.google.com/s2/favicons?sz=128&domain=${broker.domain}`}
+                          src={broker.logo ?? (broker.name === 'Headway' ? '/headway-logo.png' : `https://www.google.com/s2/favicons?sz=128&domain=${broker.domain}`)}
                           alt={broker.name}
                           width={36}
                           height={36}
@@ -615,7 +621,14 @@ export default function FXPayoutPage() {
                       </div>
 
                       <div className="grid grid-cols-3 gap-2">
-                        {broker.instruments.map((instrument, iIdx) => (
+                        {(selectedAccount
+                          ? [
+                              { name: 'gold', rebate: selectedAccount.gold },
+                              { name: 'forex', rebate: selectedAccount.forex },
+                              { name: 'crypto', rebate: selectedAccount.crypto },
+                            ]
+                          : broker.instruments
+                        ).map((instrument, iIdx) => (
                           <div
                             key={iIdx}
                             className="card-3d-soft rounded-xl border border-[#E6F0FF] bg-[linear-gradient(180deg,#F8FBFF_0%,#EEF4FF_100%)] p-2.5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]"
@@ -639,11 +652,20 @@ export default function FXPayoutPage() {
                         ))}
                       </div>
 
+                      {broker.accountTypes && selectedAccount && (
+                        <p className="mt-2 text-[10px] leading-tight text-gray-500">
+                          Rate akun <span className="font-semibold text-[#2F5BFF]">{selectedAccount.name}</span> · tipe akun dipilih di popup
+                        </p>
+                      )}
                       <div className="mt-3 flex items-center justify-between gap-2">
                         <button
                           type="button"
                           onClick={(event) => {
                             event.stopPropagation();
+                            if (broker.accountTypes) {
+                              setAccountModal({ broker, mode: 'copy' });
+                              return;
+                            }
                             void handleCopyIbLink(broker);
                           }}
                           className="inline-flex items-center gap-1.5 rounded-lg border border-[#DDE8FF] bg-white px-2.5 py-1.5 text-[11px] font-semibold text-[#2F5BFF] shadow-[0_8px_18px_-16px_rgba(47,91,255,0.6)] transition hover:border-[#C5D7FF] hover:bg-[#F5F8FF]"
@@ -666,7 +688,8 @@ export default function FXPayoutPage() {
                         </span>
                       </div>
                     </div>
-                  ))
+                    );
+                  })
                 ) : (
                   <div className="col-span-full rounded-[28px] border border-dashed border-gray-300 bg-white/60 px-8 py-14 text-center lg:col-span-3">
                     <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2F5BFF] to-[#3C66F5] text-white shadow-[0_16px_40px_-18px_rgba(47,91,255,0.9)]">
@@ -686,6 +709,91 @@ export default function FXPayoutPage() {
                 )}
               </div>
             </div>
+
+{/* ACCOUNT TYPE MODAL */}
+{accountModal?.broker.accountTypes &&
+  createPortal(
+    <div
+      className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/45 p-4 backdrop-blur-sm"
+      onClick={() => setAccountModal(null)}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="account-modal-title"
+        onClick={(event) => event.stopPropagation()}
+        className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-[28px] border border-white/60 bg-white p-5 shadow-[0_30px_80px_-20px_rgba(15,23,42,0.45)] sm:p-6"
+      >
+        <button
+          type="button"
+          onClick={() => setAccountModal(null)}
+          className="absolute right-4 top-4 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-xl text-gray-500 transition hover:bg-gray-200 hover:text-gray-900"
+          aria-label="Close"
+        >
+          ×
+        </button>
+
+        <div className="mb-4 flex items-center gap-3 pr-10">
+          <img
+            src={accountModal.broker.logo ?? `https://www.google.com/s2/favicons?sz=128&domain=${accountModal.broker.domain}`}
+            alt={accountModal.broker.name}
+            width={48}
+            height={48}
+            className="h-12 w-12 rounded-2xl border border-[#E8F0FF] bg-white p-1"
+          />
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#2F5BFF]">
+              {accountModal.mode === 'copy' ? t.broker.copyIbLink : t.broker.applyNow.replace(' →', '')}
+            </p>
+            <h3 id="account-modal-title" className="mt-0.5 text-xl font-bold text-gray-900">
+              {accountModal.broker.name}
+            </h3>
+          </div>
+        </div>
+
+        <p className="mb-3 text-sm leading-6 text-gray-600">Pilih tipe akun. Rate Gold, Forex, dan Crypto berbeda untuk tiap akun.</p>
+
+        <div className="space-y-2">
+          {accountModal.broker.accountTypes.map((account) => (
+            <button
+              key={account.name}
+              type="button"
+              onClick={() => {
+                if (accountModal.mode === 'copy') {
+                  void handleCopyIbLink(accountModal.broker, account.url);
+                } else {
+                  window.open(account.url, '_blank', 'noopener,noreferrer');
+                }
+                setAccountModal(null);
+              }}
+              className="group w-full cursor-pointer rounded-2xl border border-[#DCE8FF] bg-[#F8FBFF] px-4 py-3 text-left transition hover:border-[#2F5BFF] hover:bg-[#EEF4FF]"
+            >
+              <div className="flex items-center justify-between">
+                <p className="font-bold text-gray-900">{account.name}</p>
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2F5BFF] text-white transition group-hover:translate-x-1">→</span>
+              </div>
+              <div className="mt-2 grid grid-cols-3 gap-2 text-center">
+                {[
+                  ['Gold', account.gold],
+                  ['Forex', account.forex],
+                  ['Crypto', account.crypto],
+                ].map(([label, value]) => (
+                  <div key={label as string} className="rounded-lg bg-white py-1.5">
+                    <p className="text-[10px] font-semibold text-gray-500">{label}</p>
+                    <p className="text-sm font-bold text-[#2F5BFF]">${(value as number).toFixed(2)}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-1.5 text-[10px] text-gray-500">
+                Gold spread {account.spreadGold.toFixed(2)} · Commission 0 · Up to 1:2000 · Free Swap
+              </p>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>,
+    document.body
+  )}
 
 {/* BROKER REGISTRATION MODAL */}
 {selectedRegisterBroker &&
@@ -708,7 +816,7 @@ export default function FXPayoutPage() {
           className="absolute right-5 top-5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-xl text-gray-500 transition hover:bg-gray-200 hover:text-gray-900"
           aria-label="Close"
         >
-          ×
+          Ã—
         </button>
 
         <div className="mb-6 flex items-center gap-4 pr-12">
@@ -758,7 +866,7 @@ export default function FXPayoutPage() {
               </div>
 
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2F5BFF] text-lg text-white transition group-hover:translate-x-1">
-                →
+                â†’
               </span>
             </a>
           ))}

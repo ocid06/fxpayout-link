@@ -8,9 +8,20 @@ export type Instrument = {
 
 export type BrokerType = 'auto' | 'manual' | 'volume'
 
+export type AccountType = {
+  name: string
+  url: string
+  gold: number
+  forex: number
+  crypto: number
+  spreadGold: number
+}
+
 export type Broker = {
   name: string
   type: BrokerType
+  logo?: string
+  accountTypes?: AccountType[]
   ibLink?: string
   registerOptions?: {
     name: string
@@ -57,6 +68,26 @@ export const brokers: Broker[] = [
       { name: "eurUsd", rebate: 11 },
       { name: "xauUsd", rebate: 16 },
       { name: "crypto", rebate: 13 }
+    ]
+  },
+
+  {
+    name: "WeTrade",
+    type: "manual",
+    logo: "/wetrade-logo.png",
+    domain: "wetrade.com",
+    accountTypes: [
+      { name: "Standard", url: "https://portal.wetrade.com/register?code=10139957", gold: 2, forex: 2, crypto: 1.5, spreadGold: 0.16 },
+      { name: "Standard Plus", url: "https://portal.wetrade.com/register?code=16139957", gold: 6, forex: 2, crypto: 1.5, spreadGold: 0.22 },
+      { name: "STP", url: "https://portal.wetrade.com/register?code=11139957", gold: 14, forex: 6, crypto: 1.5, spreadGold: 0.32 },
+      { name: "AFF (Affiliate)", url: "https://portal.wetrade.com/register?code=12139957", gold: 18, forex: 10, crypto: 1.5, spreadGold: 0.37 },
+      { name: "MU-1", url: "https://portal.wetrade.com/register?code=14139957", gold: 24, forex: 16, crypto: 1.5, spreadGold: 0.42 },
+      { name: "MU-2", url: "https://portal.wetrade.com/register?code=15139957", gold: 34, forex: 26, crypto: 1.5, spreadGold: 0.52 }
+    ],
+    instruments: [
+      { name: "gold", rebate: 2 },
+      { name: "forex", rebate: 2 },
+      { name: "crypto", rebate: 1.5 }
     ]
   },
 
@@ -429,8 +460,8 @@ export const brokers: Broker[] = [
 ]
 
 export const brokerDisplayGroups = {
-  primary: ["TMGM", "Valetax", "Exness"],
-  trusted: ["XM", "PU Prime", "VT Markets", "Ultima Markets", "Vantage", "HFM"],
+  primary: ["TMGM", "Valetax", "WeTrade", "VT Markets", "PU Prime", "Vantage"],
+  trusted: ["Exness", "XM", "Ultima Markets", "HFM"],
 } as const
 
 const priorityBrokerOrder: readonly string[] = [
