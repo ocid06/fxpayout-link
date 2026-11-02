@@ -216,6 +216,55 @@ export default function FXPayoutPage() {
     return sortBrokersForDisplay(filteredBrokers);
   }, [searchTerm, selectedTab, rebateFilter]);
 
+  useEffect(() => {
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !('IntersectionObserver' in window)
+    ) {
+      return;
+    }
+
+    const elements = document.querySelectorAll<HTMLElement>('[data-scroll-reveal]');
+    if (elements.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          const element = entry.target as HTMLElement;
+          if (element.dataset.revealed === 'true') {
+            observer.unobserve(element);
+            return;
+          }
+
+          element.dataset.revealed = 'true';
+          element.animate(
+            [
+              { opacity: 0, transform: 'translateY(18px)' },
+              { opacity: 1, transform: 'translateY(0)' },
+            ],
+            {
+              duration: 650,
+              delay: Number(element.dataset.revealDelay ?? 0),
+              easing: 'cubic-bezier(0.2, 0.65, 0.3, 1)',
+              fill: 'both',
+            }
+          );
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -24px 0px' }
+    );
+
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, [visibleBrokers]);
+
   const brokerCountLabel =
     visibleBrokers.length === brokers.length
       ? t.broker.countAvailable(brokers.length)
@@ -316,7 +365,7 @@ export default function FXPayoutPage() {
           <div className="lg:grid lg:grid-cols-[0.98fr_1.02fr] lg:gap-16 lg:items-center">
             <div className="lg:sticky lg:top-10">
               {/* PROFILE */}
-              <div className="text-center mb-10 lg:text-left lg:mb-6">
+              <div data-scroll-reveal className="text-center mb-10 lg:text-left lg:mb-6">
                 <div className="w-32 h-32 mx-auto mb-6 relative lg:mx-0 lg:w-32 lg:h-32 lg:mb-3">
                   <div className="blue-radial-glow" />
 
@@ -378,7 +427,7 @@ export default function FXPayoutPage() {
                 </div>
               </div>
 
-              <div className="mb-12 lg:mb-0 lg:mt-6">
+              <div data-scroll-reveal className="mb-12 lg:mb-0 lg:mt-6">
                 <div className="grid grid-cols-2 gap-4 lg:items-center">
                   {/* WEBSITE */}
                   <div className="cta-button">
@@ -408,7 +457,7 @@ export default function FXPayoutPage() {
             </div>
 
             <div className="hidden lg:block">
-              <div className="premium-card-shell group rounded-[28px] border border-white/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.62),rgba(237,244,255,0.72))] p-5 shadow-[0_24px_60px_-36px_rgba(47,91,255,0.72)] backdrop-blur-xl">
+              <div data-scroll-reveal className="premium-card-shell group rounded-[28px] border border-white/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.62),rgba(237,244,255,0.72))] p-5 shadow-[0_24px_60px_-36px_rgba(47,91,255,0.72)] backdrop-blur-xl">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#2F5BFF]">{t.summary.brokerPartner}</p>
@@ -445,7 +494,7 @@ export default function FXPayoutPage() {
                     <span className="text-[32px] font-black leading-none tracking-[-0.08em] text-white drop-shadow-[0_0_18px_rgba(125,211,252,0.3)]">{t.summary.averageRebateValue}</span>
                   </div>
                   <div className="mt-4 h-2 rounded-full bg-white/12 ring-1 ring-inset ring-white/10 overflow-hidden">
-                    <div className="progress-shimmer h-full w-[78%] rounded-full bg-[linear-gradient(135deg,#ffffff_0%,#90d9ff_18%,#2f5bff_48%,#4f7dff_72%,#85d6ff_100%)] shadow-[0_0_20px_rgba(47,91,255,0.42),0_0_10px_rgba(255,255,255,0.18)]" />
+                    <div className="h-full w-[78%] rounded-full bg-[linear-gradient(135deg,#ffffff_0%,#90d9ff_18%,#2f5bff_48%,#4f7dff_72%,#85d6ff_100%)] shadow-[0_0_20px_rgba(47,91,255,0.42),0_0_10px_rgba(255,255,255,0.18)]" />
                   </div>
                 </div>
               </div>
@@ -459,9 +508,9 @@ export default function FXPayoutPage() {
                 {t.broker.sectionTitle}
               </h2>
 
-              <div className="card-3d mb-6 rounded-[28px] border border-[#E8F0FF] bg-[linear-gradient(180deg,#F8FBFF_0%,#EEF4FF_100%)] p-5 shadow-[0_20px_50px_-38px_rgba(47,91,255,0.7)] lg:p-6">
+              <div data-scroll-reveal className="mb-6 rounded-2xl border border-[#E5E7EB] bg-white p-5 lg:p-6">
                 <div className="mb-4 flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2F5BFF] to-[#4A7CFF] text-white shadow-[0_14px_30px_-18px_rgba(47,91,255,0.9)]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#2F5BFF] text-white">
                     <FileText className="h-6 w-6" aria-hidden="true" />
                   </div>
                   <div>
@@ -472,7 +521,7 @@ export default function FXPayoutPage() {
 
                 <div className="space-y-3">
                   {t.onboarding.steps.map((step, index) => (
-                    <details key={index} className="card-3d-soft group rounded-2xl border border-white/70 bg-white/70 px-4 py-3 shadow-[0_12px_24px_-24px_rgba(47,91,255,0.55)]">
+                    <details key={index} className="group rounded-xl border border-[#E5E7EB] bg-white px-4 py-3">
                       <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
                           <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#EFF4FF] text-sm font-semibold text-[#2F5BFF]">
@@ -491,7 +540,7 @@ export default function FXPayoutPage() {
                   ))}
                 </div>
 
-                <div className="card-3d-soft mt-4 rounded-2xl border border-[#D9E7FF] bg-white/80 p-4 shadow-[0_10px_24px_-22px_rgba(47,91,255,0.7)]">
+                <div className="mt-4 rounded-xl border border-[#E5E7EB] bg-[#F8FAFC] p-4">
                   <p className="text-sm leading-6 text-gray-700">{t.onboarding.helpCta}</p>
                   <a
                     href="#support-admin"
@@ -502,7 +551,7 @@ export default function FXPayoutPage() {
                 </div>
               </div>
 
-              <div className="card-3d mb-6 rounded-[28px] border border-[#E8F0FF] bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FBFF_100%)] p-4 shadow-[0_18px_48px_-32px_rgba(47,91,255,0.65)] backdrop-blur-xl">
+              <div data-scroll-reveal className="mb-6 rounded-2xl border border-[#E5E7EB] bg-white p-4">
                 <div className="mb-4 inline-flex w-full items-center rounded-2xl bg-[#EEF3FF] p-1.5">
                   {regionTabs.map((tab) => {
                     const isActive = selectedTab === tab.key;
@@ -514,7 +563,7 @@ export default function FXPayoutPage() {
                           onClick={() => setSelectedTab(tab.key)}
                           className={`flex-1 rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-200 ${
                             isActive
-                              ? 'bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white shadow-[0_8px_20px_-14px_rgba(47,91,255,0.9)]'
+                              ? 'bg-[#2F5BFF] text-white'
                               : 'text-gray-600 hover:text-gray-900'
                           }`}
                         >
@@ -543,7 +592,7 @@ export default function FXPayoutPage() {
                 </div>
 
                 <div className="mb-4 flex justify-center">
-                  <div className="inline-flex w-full max-w-2xl items-stretch rounded-2xl border border-gray-200 bg-white p-1 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.45)]">
+                  <div className="inline-flex w-full max-w-2xl items-stretch rounded-2xl border border-gray-200 bg-white p-1">
                     {rebateOptions.map((option) => {
                       const isActive = rebateFilter === option.key;
 
@@ -554,7 +603,7 @@ export default function FXPayoutPage() {
                           onClick={() => setRebateFilter(option.key)}
                           className={`group relative flex-1 rounded-xl px-3 py-3 text-sm font-semibold transition-all duration-200 ease-out active:scale-[0.98] ${
                             isActive
-                              ? 'bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white shadow-[0_10px_24px_-14px_rgba(47,91,255,0.9)]'
+                              ? 'bg-[#2F5BFF] text-white'
                               : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                           }`}
                         >
@@ -581,7 +630,9 @@ export default function FXPayoutPage() {
 
                     return (
 <div
-  key={idx}
+  key={broker.name}
+  data-scroll-reveal
+  data-reveal-delay={Math.min(idx, 5) * 55}
   role="link"
   tabIndex={0}
   onClick={() => openBroker(broker)}
@@ -592,7 +643,7 @@ export default function FXPayoutPage() {
     event.preventDefault();
     openBroker(broker);
   }}
-  className="card-3d block cursor-pointer rounded-[24px] border border-[#EAF1FF] bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FBFF_100%)] p-4 shadow-[0_16px_36px_-28px_rgba(47,91,255,0.6)] transition hover:-translate-y-1 hover:border-[#CFE0FF] hover:shadow-[0_20px_52px_-32px_rgba(47,91,255,0.7)] lg:p-4"
+  className="block cursor-pointer rounded-[20px] border border-[#E5E7EB] bg-white p-4 shadow-[0_4px_12px_-8px_rgba(15,23,42,0.16)] lg:p-4"
 >
                         <div className="flex items-center gap-4 mb-3 pb-3 border-b border-gray-200 lg:gap-3 lg:mb-3 lg:pb-3">
                         <img
@@ -631,7 +682,7 @@ export default function FXPayoutPage() {
                         ).map((instrument, iIdx) => (
                           <div
                             key={iIdx}
-                            className="card-3d-soft rounded-xl border border-[#E6F0FF] bg-[linear-gradient(180deg,#F8FBFF_0%,#EEF4FF_100%)] p-2.5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]"
+                            className="rounded-xl border border-[#E5E7EB] bg-[#F8FAFC] p-2.5 text-center"
                           >
                             <p className="font-semibold text-gray-800 text-[11px] mb-1">
                               {t.broker.instruments?.[instrument.name as keyof typeof t.broker.instruments] ?? instrument.name}
@@ -880,7 +931,7 @@ export default function FXPayoutPage() {
     document.body
   )}
             {/* SUPPORT / ADMIN */}
-            <div id="support-admin" className="mb-12 w-full lg:mb-10">
+            <div id="support-admin" data-scroll-reveal className="mb-12 w-full lg:mb-10">
               <div className="card-3d bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-sm lg:p-7">
                 <h2 className="text-xl font-bold text-center mb-2 text-gray-900">
                   {t.support.title}
@@ -925,7 +976,7 @@ export default function FXPayoutPage() {
             </div>
 
             {/* FOOTER */}
-            <div className="text-center text-xs space-y-3 border-t border-[#e5e7eb] pt-10" style={{ color: '#374151' }}>
+            <div data-scroll-reveal className="text-center text-xs space-y-3 border-t border-[#e5e7eb] pt-10" style={{ color: '#374151' }}>
               <p className="font-semibold">{t.footer.disclaimerTitle}</p>
 
               <p>
