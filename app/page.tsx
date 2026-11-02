@@ -892,28 +892,13 @@ export default function FXPayoutPage() {
 
                 <div className="space-y-3">
                   <a
-                    href="https://wa.me/6282125597634"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="card-3d-soft flex items-center justify-between px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 transition"
-                  >
-                    <span className="font-medium text-gray-800">
-                      {t.support.one}
-                    </span>
-
-                    <span className="text-[#2F5BFF] font-semibold text-sm">
-                      {t.support.whatsapp}
-                    </span>
-                  </a>
-
-                  <a
                     href="https://wa.me/628212888890"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="card-3d-soft flex items-center justify-between px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 transition"
                   >
                     <span className="font-medium text-gray-800">
-                      {t.support.two}
+                      {t.support.one}
                     </span>
 
                     <span className="text-[#2F5BFF] font-semibold text-sm">
