@@ -836,7 +836,7 @@ export default function FXPayoutPage() {
           className="absolute right-5 top-5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-xl text-gray-500 transition hover:bg-gray-200 hover:text-gray-900"
           aria-label="Close"
         >
-          Ã—
+          ×
         </button>
 
         <div className="mb-6 flex items-center gap-4 pr-12">
@@ -850,24 +850,52 @@ export default function FXPayoutPage() {
 
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#2F5BFF]">
-              Register Broker
+              {selectedRegisterBroker.registerModal ? 'Juno Markets' : 'Register Broker'}
             </p>
 
             <h3
               id="broker-register-title"
               className="mt-1 text-xl font-bold text-gray-900"
             >
-              {selectedRegisterBroker.name}
+              {selectedRegisterBroker.registerModal?.title ?? selectedRegisterBroker.name}
             </h3>
           </div>
         </div>
 
         <p className="mb-4 text-sm leading-6 text-gray-600">
-          Pilih jenis akun yang ingin Anda daftarkan.
+          {selectedRegisterBroker.registerModal?.description ?? 'Pilih jenis akun yang ingin Anda daftarkan.'}
         </p>
 
+        {selectedRegisterBroker.registerModal && (
+          <div className="space-y-3">
+            {selectedRegisterBroker.registerOptions.map((option) => (
+              <div
+                key={option.name}
+                className="flex flex-col gap-3 rounded-2xl border border-[#DCE8FF] bg-[#F8FBFF] p-4 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div>
+                  <p className="font-bold text-gray-900">{option.name}</p>
+                  <span className="mt-1 inline-block rounded-full bg-[#EEF2FF] px-2.5 py-0.5 text-[11px] font-semibold text-[#2343C4]">
+                    Swap Free
+                  </span>
+                </div>
+                <a
+                  href={option.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setSelectedRegisterBroker(null)}
+                  aria-label={option.label ?? option.name}
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-gradient-to-r from-[#3150E8] to-[#4160FF] px-5 text-sm font-semibold text-white shadow-[0_10px_26px_-18px_rgba(47,91,255,0.9)] transition hover:opacity-90"
+                >
+                  {selectedRegisterBroker.registerModal?.action}
+                </a>
+              </div>
+            ))}
+          </div>
+        )}
+
         <div className="space-y-3">
-          {selectedRegisterBroker.registerOptions.map((option) => (
+          {(selectedRegisterBroker.registerModal ? [] : selectedRegisterBroker.registerOptions).map((option) => (
             <a
               key={option.name}
               href={option.url}

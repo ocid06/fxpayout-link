@@ -26,7 +26,15 @@ export type Broker = {
   registerOptions?: {
     name: string
     url: string
+    label?: string
+    accountType?: string
+    referralCode?: string
   }[]
+  registerModal?: {
+    title: string
+    description: string
+    action: string
+  }
   domain: string
   instruments: Instrument[]
 }
@@ -154,7 +162,34 @@ export const brokers: Broker[] = [
   {
     name: "JunoMarkets",
     type: "manual",
-    ibLink: "https://my.junoportal.com/en/auth?refercode=3GPmiy",
+    registerModal: {
+      title: "Pilih Jenis Akun Juno",
+      description: "Pilih jenis akun trading yang ingin Anda daftarkan.",
+      action: "Daftar Sekarang →"
+    },
+    registerOptions: [
+      {
+        name: "Standard",
+        label: "Standard — Swap Free",
+        url: "https://my.junoportal.com/en/auth?refercode=mGtC13",
+        accountType: "stp_00_sf",
+        referralCode: "mGtC13"
+      },
+      {
+        name: "Cent",
+        label: "Cent — Swap Free",
+        url: "https://my.junoportal.com/en/auth?refercode=MIPRoD",
+        accountType: "stp_cent_00_sf",
+        referralCode: "MIPRoD"
+      },
+      {
+        name: "ECN",
+        label: "ECN — Swap Free",
+        url: "https://my.junoportal.com/en/auth?refercode=vsPNDE",
+        accountType: "ecn_07c_sf",
+        referralCode: "vsPNDE"
+      }
+    ],
     domain: "junomarkets.com",
     instruments: [
       { name: "EUR/USD", rebate: 3 },
