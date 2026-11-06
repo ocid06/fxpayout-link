@@ -460,8 +460,8 @@ export const brokers: Broker[] = [
 ]
 
 export const brokerDisplayGroups = {
-  primary: ["TMGM", "Valetax", "WeTrade", "VT Markets", "PU Prime", "Vantage"],
-  trusted: ["Exness", "XM", "Ultima Markets", "HFM"],
+  primary: ["TMGM", "Valetax", "Exness", "WeTrade", "VT Markets", "PU Prime", "Vantage"],
+  trusted: ["XM", "Ultima Markets", "HFM"],
 } as const
 
 const priorityBrokerOrder: readonly string[] = [

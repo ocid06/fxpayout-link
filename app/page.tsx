@@ -2,9 +2,14 @@
 import { createPortal } from 'react-dom';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { Check, Copy, FileText, Link2, Languages, TrendingUp, UserRound, Wallet } from 'lucide-react';
+import { Check, Copy, FileText, Link2, TrendingUp, UserRound, Wallet } from 'lucide-react';
 import { brokers, sortBrokersForDisplay } from '@/lib/brokers';
 import { translations, type Locale } from '@/locales';
+import { AddApp } from '@/components/add-app';
+import { TopAppBanner } from '@/components/top-app-banner';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { SupportSection } from '@/components/support-section';
+import { BrandMark } from '@/components/brand-mark';
 
 export default function FXPayoutPage() {
   type RegionTab = 'indonesia' | 'global' | 'all';
@@ -22,7 +27,6 @@ export default function FXPayoutPage() {
   const [rebateFilter, setRebateFilter] = useState<RebateFilter>('all');
   const [locale, setLocale] = useState<Locale>('en');
   const [isLocaleReady, setIsLocaleReady] = useState(false);
-  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const [copiedBrokerName, setCopiedBrokerName] = useState<string | null>(null);
   const [selectedRegisterBroker, setSelectedRegisterBroker] = useState<
   (typeof brokers)[number] | null
@@ -307,7 +311,7 @@ export default function FXPayoutPage() {
   };
 
   return (
-    <div className="relative overflow-hidden min-h-screen bg-premium">
+    <div className="relative min-h-screen overflow-x-clip bg-[#F7F9FF]">
       {/* Animated Background Chart */}
       <svg
         className="animated-chart absolute inset-0 w-full h-full pointer-events-none"
@@ -360,8 +364,10 @@ export default function FXPayoutPage() {
         <circle cx="900" cy="200" r="4" fill="#2F5BFF" opacity="0.4" />
       </svg>
 
-      <div className="relative z-10 flex flex-col items-center justify-center px-4 py-12 lg:px-8 lg:py-14">
-        <div className="relative w-full max-w-md glass-container lg:max-w-[1400px] lg:rounded-[30px] lg:border lg:border-white/50 lg:bg-white/20 lg:backdrop-blur-xl lg:shadow-[0_30px_90px_-45px_rgba(47,91,255,0.65)] lg:px-10 lg:py-8 xl:px-12 xl:py-10">
+      <TopAppBanner />
+
+      <div id="top" className="relative z-10 flex flex-col items-center justify-center px-4 py-12 lg:px-8 lg:py-14">
+        <div className="relative w-full max-w-md glass-container lg:max-w-[1280px] lg:rounded-[24px] lg:border lg:border-white/50 lg:bg-white/20 lg:backdrop-blur-xl lg:shadow-[0_30px_90px_-45px_rgba(47,91,255,0.65)] lg:px-10 lg:py-8 xl:px-12 xl:py-10">
           <div className="lg:grid lg:grid-cols-[0.98fr_1.02fr] lg:gap-16 lg:items-center">
             <div className="lg:sticky lg:top-10">
               {/* PROFILE */}
@@ -381,50 +387,13 @@ export default function FXPayoutPage() {
                   </div>
                 </div>
 
-                <h1 className="text-4xl font-bold mb-3 lg:text-5xl lg:leading-tight lg:mb-2" style={{ color: '#111827' }}>
+                <h1 className="text-4xl font-bold mb-3 lg:text-5xl lg:leading-tight lg:mb-2"                 style={{ color: '#152B71' }}>
                   {t.brand.name}
                 </h1>
 
                 <p className="text-sm leading-relaxed mb-8 lg:max-w-[440px] lg:text-[16px] lg:leading-7 lg:mb-0" style={{ color: '#374151' }}>
                   {t.hero.description}
                 </p>
-              </div>
-
-              <div className={`mb-6 flex justify-end lg:absolute lg:top-6 lg:z-30 lg:mb-0 ${locale === 'ar' ? 'lg:left-6 lg:right-auto' : 'lg:right-6 lg:left-auto'}`}>
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setIsLanguageMenuOpen((prev) => !prev)}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#2F5BFF]/20 bg-white/75 text-sm font-semibold text-[#2F5BFF] shadow-[0_10px_20px_-18px_rgba(47,91,255,0.9)] lg:w-auto lg:min-w-[104px] lg:gap-2 lg:px-3"
-                    aria-label={t.language.changeLanguage}
-                  >
-                    <Languages className="h-5 w-5" aria-hidden="true" />
-                    <span className="hidden text-[10px] font-bold uppercase tracking-[0.28em] text-[#2F5BFF] lg:inline-block">
-                      {locale.toUpperCase()}
-                    </span>
-                  </button>
-
-                  {isLanguageMenuOpen && (
-                    <div className="absolute right-0 top-12 z-20 w-36 rounded-2xl border border-gray-200 bg-white/95 p-1 shadow-[0_16px_40px_-24px_rgba(15,23,42,0.7)] backdrop-blur-xl">
-                      {languageOptions.map((option) => (
-                        <button
-                          key={option.code}
-                          type="button"
-                          onClick={() => {
-                            setLocale(option.code);
-                            window.localStorage.setItem('fxpayout-locale', option.code);
-                            window.localStorage.setItem('fxpayout-locale-manual', '1');
-                            setIsLanguageMenuOpen(false);
-                          }}
-                          className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#2F5BFF]"
-                        >
-                          <span>{option.label}</span>
-                          <span className="text-xs text-gray-400">{option.code.toUpperCase()}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
               </div>
 
               <div data-scroll-reveal className="mb-12 lg:mb-0 lg:mt-6">
@@ -435,7 +404,7 @@ export default function FXPayoutPage() {
                       href="https://fxpayout.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex min-h-[68px] w-full items-center justify-center rounded-2xl bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] px-6 py-4 text-base font-semibold leading-none tracking-[-0.01em] text-white shadow-[0_10px_26px_-18px_rgba(47,91,255,0.9)]"
+                      className="flex min-h-[60px] w-full items-center justify-center rounded-full bg-gradient-to-r from-[#3150E8] to-[#4160FF] px-6 py-4 text-base font-semibold leading-none tracking-[-0.01em] text-white shadow-[0_10px_26px_-18px_rgba(47,91,255,0.9)]"
                     >
                       {t.hero.officialWebsite}
                     </a>
@@ -447,7 +416,7 @@ export default function FXPayoutPage() {
                       href="https://www.fxpayout.com/calculator"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex min-h-[68px] w-full items-center justify-center rounded-2xl border-2 border-[#2F5BFF] px-6 py-4 text-base font-semibold leading-none tracking-[-0.01em] text-[#2F5BFF] bg-white/60 shadow-[0_10px_26px_-18px_rgba(47,91,255,0.7)]"
+                      className="flex min-h-[60px] w-full items-center justify-center rounded-full border-2 border-[#4160FF] px-6 py-4 text-base font-semibold leading-none tracking-[-0.01em] text-[#2343C4] bg-white/60"
                     >
                       {t.hero.calculateRebate}
                     </a>
@@ -469,7 +438,7 @@ export default function FXPayoutPage() {
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-3">
-                  {brokers.slice(0, 4).map((broker, idx) => (
+                  {sortBrokersForDisplay(brokers).slice(0, 4).map((broker, idx) => (
                     <div key={idx} className="card-3d-soft rounded-[20px] border border-[#E8F0FF] bg-white/72 p-3 shadow-[0_14px_30px_-28px_rgba(47,91,255,0.65)] backdrop-blur-md">
                       <div className="flex items-center gap-2.5">
                         <img
@@ -930,66 +899,54 @@ export default function FXPayoutPage() {
     </div>,
     document.body
   )}
-            {/* SUPPORT / ADMIN */}
-            <div id="support-admin" data-scroll-reveal className="mb-12 w-full lg:mb-10">
-              <div className="card-3d bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-gray-200 shadow-sm lg:p-7">
-                <h2 className="text-xl font-bold text-center mb-2 text-gray-900">
-                  {t.support.title}
-                </h2>
+            <AddApp locale={locale} />
 
-                <p className="text-sm text-center text-gray-600 mb-6">
-                  {t.support.description}
-                </p>
+            <SupportSection locale={locale} text={t.support} />
 
-                <div className="space-y-3">
-                  <a
-                    href="https://wa.me/628212888890"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="card-3d-soft flex items-center justify-between px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 transition"
-                  >
-                    <span className="font-medium text-gray-800">
-                      {t.support.one}
-                    </span>
-
-                    <span className="text-[#2F5BFF] font-semibold text-sm">
-                      {t.support.whatsapp}
-                    </span>
-                  </a>
-
-                  <a
-                    href="https://whatsapp.com/channel/0029VbBwSxf8fewzsFqX8B2f"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="card-3d-soft flex items-center justify-between px-5 py-4 rounded-xl bg-gradient-to-r from-[#2F5BFF] to-[#3C66F5] text-white shadow-md hover:opacity-90 transition"
-                  >
-                    <span className="font-semibold">
-                      {t.support.channel}
-                    </span>
-
-                    <span className="text-sm">
-                      {t.support.join}
-                    </span>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* FOOTER */}
-            <div data-scroll-reveal className="text-center text-xs space-y-3 border-t border-[#e5e7eb] pt-10" style={{ color: '#374151' }}>
-              <p className="font-semibold">{t.footer.disclaimerTitle}</p>
-
-              <p>
-                {t.footer.disclaimer}
-              </p>
-
-              <p className="pt-2 font-medium">
-                {t.footer.copyright}
-              </p>
-            </div>
+            {/* FOOTER moved to full-width footer below */}
           </div>
         </div>
       </div>
+
+      <footer className="relative z-10 mt-6 overflow-hidden bg-gradient-to-br from-[#4160FF] via-[#4160FF] to-[#3150E8] text-white">
+        <div className="mx-auto w-full max-w-[1280px] px-4 py-12 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+            <div>
+              <a href="#top" className="flex items-center gap-2.5 font-[family-name:var(--font-heading)] text-xl font-bold tracking-wide">
+                <BrandMark variant="on-blue" size={44} />
+                <span>FXPAYOUT</span>
+              </a>
+              <p className="mt-4 max-w-md text-sm leading-6 text-white/85">{t.hero.description}</p>
+                            <LanguageSwitcher
+                              locale={locale}
+                              options={languageOptions}
+                              label={t.language.changeLanguage}
+                              onSelect={(code) => {
+                                setLocale(code as Locale);
+                                window.localStorage.setItem('fxpayout-locale', code);
+                                window.localStorage.setItem('fxpayout-locale-manual', '1');
+                              }}
+                            />
+                          </div>
+
+                          <div>
+                            <p className="mb-3 text-sm font-bold uppercase tracking-wider">Quick Links</p>
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/85">
+                <a href="https://fxpayout.com" target="_blank" rel="noopener noreferrer" className="hover:text-white">FXPayout.com</a>
+                <a href="https://www.fxpayout.com/calculator" target="_blank" rel="noopener noreferrer" className="hover:text-white">{t.hero.calculateRebate}</a>
+                <a href="#add-app" className="hover:text-white">Add App</a>
+                <a href="#support-admin" className="hover:text-white">Support</a>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-10 space-y-3 border-t border-white/20 pt-8 text-center text-xs text-white/85">
+            <p className="font-semibold text-white">{t.footer.disclaimerTitle}</p>
+            <p className="mx-auto max-w-3xl">{t.footer.disclaimer}</p>
+            <p className="pt-2 font-medium text-white">{t.footer.copyright}</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
