@@ -15,7 +15,7 @@ export default function FXPayoutPage() {
   type RegionTab = 'indonesia' | 'global' | 'all';
   type RebateFilter = 'all' | 'auto' | 'manual';
 
-  const indonesiaBrokerNames = ['Finex', 'MIFX', 'HSB'];
+  const indonesiaBrokerNames = ['Finex', 'MIFX', 'HSB', 'Dupoin'];
   const regionTabs: { key: RegionTab }[] = [
     { key: 'indonesia' },
     { key: 'global' },
