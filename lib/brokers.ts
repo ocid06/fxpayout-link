@@ -199,18 +199,6 @@ export const brokers: Broker[] = [
   },
 
   {
-    name: "Elev8",
-    type: "manual",
-    ibLink: "https://clickto.trade/bJLCLmX8zDZ?ib=47807098",
-    domain: "eleveightmarkets.net/",
-    instruments: [
-      { name: "eurUsd", rebate: 8 },
-      { name: "xauUsd", rebate: 8 },
-      { name: "crypto", rebate: 8 }
-    ]
-  },
-
-  {
     name: "XM",
     type: "auto",
     ibLink: "https://affs.click/4gFt7",
@@ -514,8 +502,6 @@ export const sortBrokersForDisplay = (items: readonly Broker[]): Broker[] => {
     if (leftOrder !== undefined && rightOrder !== undefined) return leftOrder - rightOrder
     if (leftOrder !== undefined) return -1
     if (rightOrder !== undefined) return 1
-    if (left.name === "Elev8") return right.name === "Elev8" ? 0 : 1
-    if (right.name === "Elev8") return -1
     return 0
   })
 }
