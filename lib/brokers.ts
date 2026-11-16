@@ -181,7 +181,7 @@ export const brokers: Broker[] = [
     domain: "junomarkets.com",
     instruments: [
       { name: "EUR/USD", rebate: 3 },
-      { name: "XAU/USD", rebate: 18 },
+      { name: "XAU/USD", rebate: 16 },
       { name: "CRYPTO", rebate: 2 }
     ]
   },
