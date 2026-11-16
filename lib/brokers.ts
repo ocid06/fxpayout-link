@@ -148,18 +148,6 @@ export const brokers: Broker[] = [
   },
 
   {
-    name: "FBS",
-    type: "manual",
-    ibLink: "https://fbs.partners/?ibl=569605&ibp=17852638",
-    domain: "fbs.com",
-    instruments: [
-      { name: "eurUsd", rebate: 3.61 },
-      { name: "xauUsd", rebate: 10 },
-      { name: "crypto", rebate: 2.5 }
-    ]
-  },
-
-  {
     name: "JunoMarkets",
     type: "manual",
     registerModal: {
