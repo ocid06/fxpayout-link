@@ -193,7 +193,7 @@ export const brokers: Broker[] = [
     domain: "junomarkets.com",
     instruments: [
       { name: "EUR/USD", rebate: 3 },
-      { name: "XAU/USD", rebate: 3 },
+      { name: "XAU/USD", rebate: 18 },
       { name: "CRYPTO", rebate: 2 }
     ]
   },
@@ -382,7 +382,7 @@ export const brokers: Broker[] = [
 
 {
     name: "Markets4you",
-    type: "manual",
+    type: "auto",
     ibLink: "https://account.markets4you.online/en/user-registration/?affid=tvborws",
     domain: "https://www.markets4you.com",
     instruments: [
