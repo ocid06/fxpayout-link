@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Check, Copy, FileText, Link2, TrendingUp, UserRound, Wallet } from 'lucide-react';
-import { brokers, sortBrokersForDisplay } from '@/lib/brokers';
+import { brokers, DUPOIN_REFERRAL_OPTIONS, sortBrokersForDisplay } from '@/lib/brokers';
 import { translations, type Locale } from '@/locales';
 import { AddApp } from '@/components/add-app';
 import { TopAppBanner } from '@/components/top-app-banner';
@@ -28,6 +28,8 @@ export default function FXPayoutPage() {
   const [locale, setLocale] = useState<Locale>('en');
   const [isLocaleReady, setIsLocaleReady] = useState(false);
   const [copiedBrokerName, setCopiedBrokerName] = useState<string | null>(null);
+  const [dupoinCalculatorLink, setDupoinCalculatorLink] = useState<string>(DUPOIN_REFERRAL_OPTIONS[0].name);
+  const [dupoinCalculatorLots, setDupoinCalculatorLots] = useState('1');
   const [selectedRegisterBroker, setSelectedRegisterBroker] = useState<
   (typeof brokers)[number] | null
 >(null);
@@ -60,6 +62,12 @@ export default function FXPayoutPage() {
   };
 
   const t = translations[locale];
+  const selectedDupoinCalculatorOption =
+    DUPOIN_REFERRAL_OPTIONS.find((option) => option.name === dupoinCalculatorLink) ?? DUPOIN_REFERRAL_OPTIONS[0];
+  const parsedDupoinCalculatorLots = Number.parseFloat(dupoinCalculatorLots);
+  const dupoinEstimatedRebate = Number.isFinite(parsedDupoinCalculatorLots) && parsedDupoinCalculatorLots >= 0
+    ? parsedDupoinCalculatorLots * selectedDupoinCalculatorOption.goldRebatePerLot
+    : 0;
 
   const rebateOptions = [
     { key: 'all' as const, label: t.broker.rebateOptions.all },
@@ -596,6 +604,9 @@ export default function FXPayoutPage() {
                 {visibleBrokers.length > 0 ? (
                   visibleBrokers.map((broker, idx) => {
                     const selectedAccount = getSelectedAccount(broker);
+                    const goldRebateRates = broker.registerOptions?.flatMap((option) =>
+                      option.goldRebatePerLot !== undefined ? [option.goldRebatePerLot] : []
+                    ) ?? [];
 
                     return (
 <div
@@ -640,7 +651,7 @@ export default function FXPayoutPage() {
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className={`grid gap-2 ${broker.name === 'Dupoin' ? 'grid-cols-1' : 'grid-cols-3'}`}>
                         {(selectedAccount
                           ? [
                               { name: 'gold', rebate: selectedAccount.gold },
@@ -660,6 +671,12 @@ export default function FXPayoutPage() {
                             {instrument.rebate !== undefined && (
                               <p className="text-[#2F5BFF] font-bold text-sm">
                                 ${instrument.rebate.toFixed(2)}
+                              </p>
+                            )}
+
+                            {broker.name === 'Dupoin' && instrument.name.toLowerCase().replace(/[^a-z]/g, '') === 'xauusd' && goldRebateRates.length > 0 && (
+                              <p className="text-[#2F5BFF] font-bold text-sm">
+                                ${Math.min(...goldRebateRates)}–${Math.max(...goldRebateRates)}/lot
                               </p>
                             )}
 
@@ -828,7 +845,7 @@ export default function FXPayoutPage() {
         aria-modal="true"
         aria-labelledby="broker-register-title"
         onClick={(event) => event.stopPropagation()}
-        className="relative w-full max-w-md rounded-[28px] border border-white/60 bg-white p-6 shadow-[0_30px_80px_-20px_rgba(15,23,42,0.45)]"
+        className={`relative w-full ${selectedRegisterBroker.name === 'Dupoin' ? 'max-h-[calc(100dvh-2rem)] max-w-2xl overflow-y-auto' : 'max-w-md'} rounded-[28px] border border-white/60 bg-white p-6 shadow-[0_30px_80px_-20px_rgba(15,23,42,0.45)]`}
       >
         <button
           type="button"
@@ -850,7 +867,7 @@ export default function FXPayoutPage() {
 
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#2F5BFF]">
-              {selectedRegisterBroker.registerModal ? 'Juno Markets' : 'Register Broker'}
+              {selectedRegisterBroker.name === 'Dupoin' ? 'Pendaftaran' : selectedRegisterBroker.registerModal ? 'Juno Markets' : 'Register Broker'}
             </p>
 
             <h3
@@ -866,7 +883,44 @@ export default function FXPayoutPage() {
           {selectedRegisterBroker.registerModal?.description ?? 'Pilih jenis akun yang ingin Anda daftarkan.'}
         </p>
 
-        {selectedRegisterBroker.registerModal && (
+        {selectedRegisterBroker.name === 'Dupoin' && (
+          <div className="mb-5 rounded-2xl border border-[#DCE8FF] bg-[#F8FBFF] p-4 text-sm text-gray-700">
+            <p className="font-bold text-gray-900">Minimum deposit USD {selectedRegisterBroker.minimumDepositUsd}</p>
+            <p className="mt-1 leading-6">{selectedRegisterBroker.registrationNote}</p>
+          </div>
+        )}
+
+        {selectedRegisterBroker.name === 'Dupoin' ? (
+          <div className="grid gap-3 sm:grid-cols-3">
+            {selectedRegisterBroker.registerOptions.map((option) => (
+              <div
+                key={option.name}
+                className="flex flex-col rounded-2xl border border-[#DCE8FF] bg-[#F8FBFF] p-4"
+              >
+                <p className="font-bold text-gray-900">{option.name}</p>
+                <div className="mt-3 space-y-2 text-sm">
+                  <p className="flex justify-between gap-2 text-gray-600">
+                    <span>Spread Gold</span>
+                    <span className="font-semibold text-gray-900">{option.spreadGold?.toFixed(1)}</span>
+                  </p>
+                  <p className="flex justify-between gap-2 text-gray-600">
+                    <span>Rebate Gold</span>
+                    <span className="font-semibold text-gray-900">${option.goldRebatePerLot}/lot</span>
+                  </p>
+                </div>
+                <a
+                  href={option.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setSelectedRegisterBroker(null)}
+                  className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-full bg-gradient-to-r from-[#3150E8] to-[#4160FF] px-4 text-sm font-semibold text-white shadow-[0_10px_26px_-18px_rgba(47,91,255,0.9)] transition hover:opacity-90"
+                >
+                  Daftar Sekarang
+                </a>
+              </div>
+            ))}
+          </div>
+        ) : selectedRegisterBroker.registerModal ? (
           <div className="space-y-3">
             {selectedRegisterBroker.registerOptions.map((option) => (
               <div
@@ -892,6 +946,49 @@ export default function FXPayoutPage() {
               </div>
             ))}
           </div>
+        ) : null}
+
+        {selectedRegisterBroker.name === 'Dupoin' && (
+          <section aria-labelledby="dupoin-rebate-calculator-title" className="mt-5 rounded-2xl border border-[#E5E7EB] bg-white p-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+              <div className="flex-1">
+                <label id="dupoin-rebate-calculator-title" htmlFor="dupoin-rebate-link" className="block text-sm font-bold text-gray-900">
+                  Estimasi rebate XAUUSD (Gold)
+                </label>
+                <label htmlFor="dupoin-rebate-link" className="mt-3 block text-xs font-semibold text-gray-600">Pilihan link</label>
+                <select
+                  id="dupoin-rebate-link"
+                  value={dupoinCalculatorLink}
+                  onChange={(event) => setDupoinCalculatorLink(event.target.value)}
+                  className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none focus:border-[#2F5BFF]"
+                >
+                  {DUPOIN_REFERRAL_OPTIONS.map((option) => (
+                    <option key={option.name} value={option.name}>{option.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="sm:w-36">
+                <label htmlFor="dupoin-rebate-lots" className="block text-xs font-semibold text-gray-600">Volume (lot)</label>
+                <input
+                  id="dupoin-rebate-lots"
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.01"
+                  value={dupoinCalculatorLots}
+                  onChange={(event) => setDupoinCalculatorLots(event.target.value)}
+                  className="mt-1 min-h-11 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-900 outline-none focus:border-[#2F5BFF]"
+                />
+              </div>
+              <div className="rounded-xl bg-[#EEF4FF] px-4 py-2.5 sm:min-w-36">
+                <p className="text-xs font-semibold text-gray-600">Estimasi rebate</p>
+                <p className="text-lg font-bold text-[#2F5BFF]">${dupoinEstimatedRebate.toFixed(2)}</p>
+              </div>
+            </div>
+            <p className="mt-3 text-xs leading-5 text-gray-500">
+              Rebate hanya berlaku untuk XAUUSD (Gold): volume lot × ${selectedDupoinCalculatorOption.goldRebatePerLot}/lot ({selectedDupoinCalculatorOption.name}).
+            </p>
+          </section>
         )}
 
         <div className="space-y-3">

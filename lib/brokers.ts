@@ -29,15 +29,44 @@ export type Broker = {
     label?: string
     accountType?: string
     referralCode?: string
+    spreadGold?: number
+    goldRebatePerLot?: number
+    internalGroupReference?: string
   }[]
   registerModal?: {
     title: string
     description: string
     action: string
   }
+  minimumDepositUsd?: number
+  registrationNote?: string
   domain: string
   instruments: Instrument[]
 }
+
+export const DUPOIN_REFERRAL_OPTIONS = [
+  {
+    name: 'Link 1',
+    url: 'https://i.dupoin.vip/N6OlNZBZw',
+    spreadGold: 2.5,
+    goldRebatePerLot: 30,
+    internalGroupReference: 'Group 05',
+  },
+  {
+    name: 'Link 2',
+    url: 'https://i.dupoin.vip/RlC5I2O52',
+    spreadGold: 3.2,
+    goldRebatePerLot: 35,
+    internalGroupReference: 'Group 07',
+  },
+  {
+    name: 'Link 3',
+    url: 'https://i.dupoin.vip/Wh2QI8a36',
+    spreadGold: 5.0,
+    goldRebatePerLot: 50,
+    internalGroupReference: 'Group 02',
+  },
+] as const
 
 export const brokers: Broker[] = [
 
@@ -348,11 +377,18 @@ export const brokers: Broker[] = [
 {
   name: "Dupoin",
   type: "manual",
-  ibLink: "https://i.dupoin.vip/KzDiUP3Nr",
+  ibLink: DUPOIN_REFERRAL_OPTIONS[0].url,
+  registerModal: {
+    title: "Daftar Akun Dupoin",
+    description: "Pilih link pendaftaran sesuai preferensi trading Anda. Setiap link memiliki spread dan rebate Gold yang berbeda.",
+    action: "Daftar Sekarang",
+  },
+  registerOptions: [...DUPOIN_REFERRAL_OPTIONS],
+  minimumDepositUsd: 50,
+  registrationNote: "Akun baru menggunakan tipe Standard dengan Account Group Standard. Akun Micro existing tetap dapat digunakan. Account Group Zero dapat di-assign oleh Superior setelah referral menyelesaikan KYC.",
   domain: "https://www.dupoin.co.id/",
   instruments: [
-    { name: "Forex", rebate: 17 },
-    { name: "XAU/USD", rebate: 17 }
+    { name: "XAU/USD" }
   ]
 },
 
