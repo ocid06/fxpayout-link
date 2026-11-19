@@ -492,7 +492,7 @@ export const brokers: Broker[] = [
   {
     name: "HSB",
     type: "manual",
-    ibLink: "https://www.hsb.co.id/register?ref_code=QYLW0W-AW2SP",
+    ibLink: "https://client.hsb.co.id/id/register?ref_code=XUMU5T",
     domain: "hsb.co.id",
     instruments: [
       { name: "EUR/USD", rebate: 3 },
