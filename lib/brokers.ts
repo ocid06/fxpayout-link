@@ -19,7 +19,7 @@ export type AccountType = {
 
 export type Broker = {
   name: string
-  type: BrokerType
+  type?: BrokerType
   logo?: string
   accountTypes?: AccountType[]
   ibLink?: string
@@ -40,8 +40,10 @@ export type Broker = {
   }
   minimumDepositUsd?: number
   registrationNote?: string
-  domain: string
-  instruments: Instrument[]
+  description?: string
+  domain?: string
+  instruments?: Instrument[]
+  registrationOnly?: boolean
 }
 
 export const DUPOIN_REFERRAL_OPTIONS = [
@@ -499,11 +501,14 @@ export const brokers: Broker[] = [
       { name: "XAU/USD", rebate: 3 },
       { name: "CRYPTO", rebate: 3 }
     ]
+  },
+  {
+    name: "Mitrade",
+    logo: "https://www.mitrade.com/_next/static/media/mitradeLogo1.dba83b2a.png",
+    ibLink: "https://www.mitradeaffiliates.com/register?partnerReferralCode=FXPAYOUT",
+    registrationOnly: true,
+    description: "Platform trading online yang menyediakan akses ke pasar global, termasuk saham, indeks, komoditas, dan mata uang.",
   }
-
-
-
-
 ]
 
 export const brokerDisplayGroups = {
@@ -514,6 +519,7 @@ export const brokerDisplayGroups = {
 const priorityBrokerOrder: readonly string[] = [
   ...brokerDisplayGroups.primary,
   ...brokerDisplayGroups.trusted,
+  "Mitrade",
 ]
 
 export const sortBrokersForDisplay = (items: readonly Broker[]): Broker[] => {

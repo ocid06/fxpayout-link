@@ -2,7 +2,7 @@
 import { createPortal } from 'react-dom';
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { Check, Copy, FileText, Link2, TrendingUp, UserRound, Wallet } from 'lucide-react';
+import { Building2, Check, Copy, FileText, Link2, TrendingUp, UserRound, Wallet } from 'lucide-react';
 import { brokers, DUPOIN_REFERRAL_OPTIONS, sortBrokersForDisplay } from '@/lib/brokers';
 import { translations, type Locale } from '@/locales';
 import { AddApp } from '@/components/add-app';
@@ -43,6 +43,13 @@ export default function FXPayoutPage() {
 
   const getBrokerLink = (broker: (typeof brokers)[number]) =>
     broker.ibLink ?? broker.registerOptions?.[0]?.url;
+
+  const getBrokerLogoUrl = (broker: (typeof brokers)[number]) =>
+    broker.logo ?? (broker.name === 'Headway'
+      ? '/headway-logo.png'
+      : broker.domain
+        ? `https://www.google.com/s2/favicons?sz=128&domain=${broker.domain}`
+        : undefined);
 
   const openBroker = (broker: (typeof brokers)[number]) => {
     if (broker.accountTypes) {
@@ -215,6 +222,7 @@ export default function FXPayoutPage() {
 
       const matchesRegion =
         selectedTab === 'all' ||
+        broker.registrationOnly === true ||
         (isIndonesiaTab && indonesiaBrokerNames.includes(broker.name.trim())) ||
         (isGlobalTab && !indonesiaBrokerNames.includes(broker.name.trim()));
 
@@ -449,16 +457,24 @@ export default function FXPayoutPage() {
                   {sortBrokersForDisplay(brokers).slice(0, 4).map((broker, idx) => (
                     <div key={idx} className="card-3d-soft rounded-[20px] border border-[#E8F0FF] bg-white/72 p-3 shadow-[0_14px_30px_-28px_rgba(47,91,255,0.65)] backdrop-blur-md">
                       <div className="flex items-center gap-2.5">
-                        <img
-                          src={broker.logo ?? (broker.name === 'Headway' ? '/headway-logo.png' : `https://www.google.com/s2/favicons?sz=128&domain=${broker.domain}`)}
-                          alt={broker.name}
-                          width={32}
-                          height={32}
-                          className="h-8 w-8 rounded-xl border border-[#E8F0FF] bg-white"
-                        />
+                        {getBrokerLogoUrl(broker) ? (
+                          <img
+                            src={getBrokerLogoUrl(broker)}
+                            alt={broker.name}
+                            width={32}
+                            height={32}
+                            className="h-8 w-8 rounded-xl border border-[#E8F0FF] bg-white"
+                          />
+                        ) : (
+                          <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-[#E8F0FF] bg-[#F8FAFC] text-gray-500">
+                            <Building2 className="h-4 w-4" aria-hidden="true" />
+                          </div>
+                        )}
                         <div>
                           <p className="text-xs font-semibold text-gray-900">{broker.name.trim()}</p>
-                          <p className="text-[9px] text-gray-500">{broker.type === 'auto' ? t.broker.typeLabels.auto : broker.type === 'manual' ? t.broker.typeLabels.manual : broker.type === 'volume' ? t.broker.typeLabels.volume : broker.type}</p>
+                          {broker.type && (
+                            <p className="text-[9px] text-gray-500">{broker.type === 'auto' ? t.broker.typeLabels.auto : broker.type === 'manual' ? t.broker.typeLabels.manual : broker.type === 'volume' ? t.broker.typeLabels.volume : broker.type}</p>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -603,36 +619,45 @@ export default function FXPayoutPage() {
               <div className="space-y-3 max-w-full lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:items-stretch">
                 {visibleBrokers.length > 0 ? (
                   visibleBrokers.map((broker, idx) => {
+                    const isRegistrationOnly = broker.registrationOnly === true;
+                    const registerUrl = isRegistrationOnly ? getBrokerLink(broker) : undefined;
                     const selectedAccount = getSelectedAccount(broker);
                     const goldRebateRates = broker.registerOptions?.flatMap((option) =>
                       option.goldRebatePerLot !== undefined ? [option.goldRebatePerLot] : []
                     ) ?? [];
+                    const brokerLogoUrl = getBrokerLogoUrl(broker);
 
                     return (
 <div
   key={broker.name}
   data-scroll-reveal
   data-reveal-delay={Math.min(idx, 5) * 55}
-  role="link"
-  tabIndex={0}
-  onClick={() => openBroker(broker)}
-  onKeyDown={(event) => {
+  role={isRegistrationOnly ? undefined : 'link'}
+  tabIndex={isRegistrationOnly ? undefined : 0}
+  onClick={isRegistrationOnly ? undefined : () => openBroker(broker)}
+  onKeyDown={isRegistrationOnly ? undefined : (event) => {
     if (event.target !== event.currentTarget) return;
     if (event.key !== 'Enter' && event.key !== ' ') return;
 
     event.preventDefault();
     openBroker(broker);
   }}
-  className="block cursor-pointer rounded-[20px] border border-[#E5E7EB] bg-white p-4 shadow-[0_4px_12px_-8px_rgba(15,23,42,0.16)] lg:p-4"
+  className={`block rounded-[20px] border border-[#E5E7EB] bg-white p-4 shadow-[0_4px_12px_-8px_rgba(15,23,42,0.16)] lg:p-4 ${isRegistrationOnly ? '' : 'cursor-pointer'}`}
 >
                         <div className="flex items-center gap-4 mb-3 pb-3 border-b border-gray-200 lg:gap-3 lg:mb-3 lg:pb-3">
-                        <img
-                          src={broker.logo ?? (broker.name === 'Headway' ? '/headway-logo.png' : `https://www.google.com/s2/favicons?sz=128&domain=${broker.domain}`)}
-                          alt={broker.name}
-                          width={36}
-                          height={36}
-                          className="w-9 h-9 rounded-lg"
-                        />
+                        {brokerLogoUrl ? (
+                          <img
+                            src={brokerLogoUrl}
+                            alt={broker.name}
+                            width={36}
+                            height={36}
+                            className={`w-9 h-9 rounded-lg ${isRegistrationOnly ? 'object-cover object-left' : ''}`}
+                          />
+                        ) : (
+                          <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5E7EB] bg-[#F8FAFC] text-gray-500">
+                            <Building2 className="h-4 w-4" aria-hidden="true" />
+                          </div>
+                        )}
 
                         <div className="flex-1">
                           <h3 className="font-bold text-base" style={{ color: '#111827' }}>
@@ -640,7 +665,7 @@ export default function FXPayoutPage() {
                           </h3>
                         </div>
 
-                        <span
+                        {broker.type && <span
                           className="text-xs px-3 py-1 rounded-full font-semibold whitespace-nowrap"
                           style={{
                             backgroundColor: broker.type === 'auto' ? '#DBEAFE' : '#FEF3C7',
@@ -648,9 +673,12 @@ export default function FXPayoutPage() {
                           }}
                         >
                           {broker.type === 'auto' ? t.broker.typeLabels.auto : broker.type === 'manual' ? t.broker.typeLabels.manual : broker.type === 'volume' ? t.broker.typeLabels.volume : broker.type}
-                        </span>
+                        </span>}
                       </div>
 
+                      {isRegistrationOnly ? (
+                        <p className="text-sm leading-5 text-gray-600">{broker.description}</p>
+                      ) : (
                       <div className={`grid gap-2 ${broker.name === 'Dupoin' ? 'grid-cols-1' : 'grid-cols-3'}`}>
                         {(selectedAccount
                           ? [
@@ -658,7 +686,7 @@ export default function FXPayoutPage() {
                               { name: 'forex', rebate: selectedAccount.forex },
                               { name: 'crypto', rebate: selectedAccount.crypto },
                             ]
-                          : broker.instruments
+                          : broker.instruments ?? []
                         ).map((instrument, iIdx) => (
                           <div
                             key={iIdx}
@@ -688,13 +716,25 @@ export default function FXPayoutPage() {
                           </div>
                         ))}
                       </div>
+                      )}
 
                       {broker.accountTypes && selectedAccount && (
                         <p className="mt-2 text-[10px] leading-tight text-gray-500">
                           Rate akun <span className="font-semibold text-[#2F5BFF]">{selectedAccount.name}</span> · tipe akun dipilih di popup
                         </p>
                       )}
-                      <div className="mt-3 flex items-center justify-between gap-2">
+                      <div className={`mt-3 flex items-center gap-2 ${isRegistrationOnly ? 'justify-end' : 'justify-between'}`}>
+                        {isRegistrationOnly ? (
+                          <a
+                            href={registerUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center rounded-lg bg-[#2F5BFF] px-3 py-1.5 text-[11px] font-semibold text-white"
+                          >
+                            {t.broker.applyNow}
+                          </a>
+                        ) : (
+                          <>
                         <button
                           type="button"
                           onClick={(event) => {
@@ -723,6 +763,8 @@ export default function FXPayoutPage() {
                         <span className="inline-block px-3 py-1.5 bg-[#2F5BFF] text-white text-[11px] font-semibold rounded-lg">
                           {t.broker.applyNow}
                         </span>
+                          </>
+                        )}
                       </div>
                     </div>
                     );
